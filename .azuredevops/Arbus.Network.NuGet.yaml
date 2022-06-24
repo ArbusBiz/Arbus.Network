@@ -1,6 +1,7 @@
 variables:
   project: 'Arbus.Network.csproj'
   testProject: 'Arbus.Network.UnitTests.csproj'
+  artifact: 'ArbusNetwork.Artifact'
 
 stages:
   - stage: build
@@ -21,11 +22,16 @@ stages:
           displayName: 'Build $(project)'
           inputs:
             command: build
-            projects: '**/$(project)' 
+            projects: '**/$(project)'
+            outputDir: '$(Build.ArtifactStagingDirectory)/Build'
         - task: DotNetCoreCLI@2
           displayName: 'Run $(testProject)'
           inputs:
             command: test
             projects: '**/$(testProject)'
-            arguments: '--no-build -s src/tests.runsettings'
+            arguments: '-s src/tests.runsettings'
+            configuration: 'Release'
             testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'
+        - publish: $(Build.ArtifactStagingDirectory)
+          displayName: 'Publish $(artifact)'
+          artifact: $(artifact)
