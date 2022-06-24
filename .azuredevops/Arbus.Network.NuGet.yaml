@@ -1,16 +1,31 @@
-pool:
-  name: 'Building pool'
-  demands:
-    - agent.os -equals Windows_NT
+variables:
+  project: 'Arbus.Network.csproj'
+  testProject: 'Arbus.Network.UnitTests.csproj'
 
-steps:
-- checkout: self
-  fetchDepth: 1
-
-- task: DotNetCoreCLI@2
-  displayName: 'Run Arbus.Network.UnitTests.UnitTests'
-  inputs:
-    command: test
-    projects: '**/Arbus.Network.UnitTests.csproj'
-    arguments: '-s src/tests.runsettings'
-    testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'
+stages:
+  - stage: build
+    displayName: Build
+    pool:
+      name: 'Building pool'
+      demands:
+        - agent.os -equals Windows_NT
+    jobs:
+      - job: build_job
+        displayName: Build
+        workspace:
+          clean: outputs
+        steps:
+        - checkout: self
+          fetchDepth: 1
+        - task: DotNetCoreCLI@2
+          displayName: 'Build $(project)'
+          inputs:
+            command: build
+            projects: '**/$(project)' 
+        - task: DotNetCoreCLI@2
+          displayName: 'Run $(testProject)'
+          inputs:
+            command: test
+            projects: '**/$(testProject)'
+            arguments: '--no-build -s src/tests.runsettings'
+            testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'
