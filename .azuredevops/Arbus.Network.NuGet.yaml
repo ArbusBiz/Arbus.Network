@@ -1,14 +1,16 @@
 pool:
   name: 'Building pool'
+  demands:
+    - agent.os -equals Windows_NT
 
 steps:
 - checkout: self
   fetchDepth: 1
 
 - task: DotNetCoreCLI@2
-  displayName: 'Run Waiter.Shared.UnitTests'
+  displayName: 'Run Arbus.Network.UnitTests.UnitTests'
   inputs:
     command: test
-    projects: '**/Waiter.Shared.UnitTests.csproj'
+    projects: '**/Arbus.Network.UnitTests.csproj'
     arguments: '-s src/tests.runsettings'
     testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'
