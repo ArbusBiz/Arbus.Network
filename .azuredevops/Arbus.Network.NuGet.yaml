@@ -25,15 +25,14 @@ stages:
           inputs:
             command: build
             projects: '**/$(project)'
-            arguments: '-o $(Build.ArtifactStagingDirectory)/Binaries'
+            arguments: '-c Release -o $(Build.ArtifactStagingDirectory)/Binaries'
             outputDir: ''
         - task: DotNetCoreCLI@2
           displayName: 'Run $(testProject)'
           inputs:
             command: test
             projects: '**/$(testProject)'
-            arguments: '-s src/tests.runsettings'
-            configuration: 'Release'
+            arguments: '-c Release -s src/tests.runsettings'
             testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'
         - publish: $(Build.ArtifactStagingDirectory)
           displayName: 'Publish $(artifact)'
@@ -57,7 +56,9 @@ stages:
             inputs:
               command: pack
               projects: $(project)
-              versioningScheme: byBuildNumber
+              arguments: '--no-build'
+              versioningScheme: byEnvVar
+              versionEnvVar: $(Build.SourceBranchName)
           - task: DotNetCoreCLI@2
             displayName: 'Push to $(nugetFeed)'
             inputs:
