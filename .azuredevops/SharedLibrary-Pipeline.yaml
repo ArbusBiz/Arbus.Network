@@ -1,0 +1,14 @@
+pool:
+  name: 'Building pool'
+
+steps:
+- checkout: self
+  fetchDepth: 1
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run Waiter.Shared.UnitTests'
+  inputs:
+    command: test
+    projects: '**/Waiter.Shared.UnitTests.csproj'
+    arguments: '-s src/tests.runsettings'
+    testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'

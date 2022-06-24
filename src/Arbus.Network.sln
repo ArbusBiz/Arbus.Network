@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbus.Network", "Arbus.Network\Arbus.Network.csproj", "{0ADB1F8F-0D9C-422D-8800-6A2CE3F459EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2CDA7554-C709-4022-959A-666713C40375}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbus.Network.UnitTests", "Arbus.Network.UnitTests\Arbus.Network.UnitTests.csproj", "{543F51A1-B8F9-419F-A17B-42F91DE5511F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ADB1F8F-0D9C-422D-8800-6A2CE3F459EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADB1F8F-0D9C-422D-8800-6A2CE3F459EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADB1F8F-0D9C-422D-8800-6A2CE3F459EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADB1F8F-0D9C-422D-8800-6A2CE3F459EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{543F51A1-B8F9-419F-A17B-42F91DE5511F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{543F51A1-B8F9-419F-A17B-42F91DE5511F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{543F51A1-B8F9-419F-A17B-42F91DE5511F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{543F51A1-B8F9-419F-A17B-42F91DE5511F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0ADB1F8F-0D9C-422D-8800-6A2CE3F459EF} = {2CDA7554-C709-4022-959A-666713C40375}
+		{543F51A1-B8F9-419F-A17B-42F91DE5511F} = {2CDA7554-C709-4022-959A-666713C40375}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CB655656-46D2-4C21-AE3C-90E95BD9E5BD}
+	EndGlobalSection
+EndGlobal
