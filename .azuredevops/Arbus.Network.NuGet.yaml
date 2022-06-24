@@ -1,13 +1,15 @@
 variables:
+  agentsPool: 'Building pool'
   project: 'Arbus.Network.csproj'
   testProject: 'Arbus.Network.UnitTests.csproj'
   artifact: 'ArbusNetwork.Artifact'
+  nugetFeed: 'Arbus feed'
 
 stages:
   - stage: build
     displayName: Build
     pool:
-      name: 'Building pool'
+      name:  $(agentsPool)
       demands:
         - agent.os -equals Windows_NT
     jobs:
@@ -35,3 +37,29 @@ stages:
         - publish: $(Build.ArtifactStagingDirectory)
           displayName: 'Publish $(artifact)'
           artifact: $(artifact)
+
+  - stage: deploy
+    displayName: Deploy
+    condition: and(succedd(), not(eq(variables['Build.Reson'], 'PullRequest')))
+    pool: 
+      name: $(agentsPool)
+    jobs:
+      - job: pack
+        displayName: Pack binaries
+        workspace:
+          clean: all
+        steps:
+          - checkout: self
+            fetchDepth: 1
+          - task: DotNetCoreCLI@2
+            displayName: 'Pack $(project)'
+            inputs:
+              command: pack
+              projects: $(project)
+              versioningScheme: byBuildNumber
+          - task: DotNetCoreCLI@2
+            displayName: 'Push to $(nugetFeed)'
+            inputs:
+              command: push
+              packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+              feedPublish: $(nugetFeed)
