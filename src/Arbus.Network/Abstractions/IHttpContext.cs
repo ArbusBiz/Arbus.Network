@@ -1,6 +1,6 @@
 ﻿namespace Arbus.Network.Abstractions;
 
-public interface IHttpContext
+public interface IHttpClientContext
 {
     Task RunEndpoint(ApiEndpoint endpoint);
     Task<T> RunEndpoint<T>(ApiEndpoint<T> endpoint);

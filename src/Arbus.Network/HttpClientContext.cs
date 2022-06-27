@@ -4,11 +4,11 @@ using System.Net.Http.Headers;
 
 namespace Arbus.Network;
 
-public class HttpContext : IHttpContext
+public class HttpClientContext : IHttpClientContext
 {
     protected IDefaultHttpClient _httpClientHandler;
 
-    public HttpContext(IDefaultHttpClient httpClientHandler)
+    public HttpClientContext(IDefaultHttpClient httpClientHandler)
     {
         _httpClientHandler = httpClientHandler;
     }

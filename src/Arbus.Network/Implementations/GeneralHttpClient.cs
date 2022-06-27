@@ -16,7 +16,7 @@ public class GeneralHttpClient : INativeHttpClient
         _httpClient.DefaultRequestHeaders.UserAgent.Add(userAgent);
     }
 
-    public Task<HttpResponseMessage> Send(HttpRequestMessage httpRequest, CancellationToken cancellationToken, HttpCompletionOption httpCompletionOption)
+    public virtual Task<HttpResponseMessage> Send(HttpRequestMessage httpRequest, CancellationToken cancellationToken, HttpCompletionOption httpCompletionOption)
     {
         return _httpClient.SendAsync(httpRequest, httpCompletionOption, cancellationToken);
     }
