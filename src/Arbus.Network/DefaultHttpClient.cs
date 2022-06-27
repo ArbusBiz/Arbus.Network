@@ -1,8 +1,10 @@
-﻿using Arbus.Network.Application.ContentSerializers;
-using Arbus.Network.Application.Exceptions;
+﻿using Arbus.Network.Abstractions;
+using Arbus.Network.ContentSerializers;
+using Arbus.Network.Exceptions;
+using Arbus.Network.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace Arbus.Network.Application;
+namespace Arbus.Network;
 
 public class DefaultHttpClient : IDefaultHttpClient
 {
@@ -63,17 +65,16 @@ public class DefaultHttpClient : IDefaultHttpClient
             throw new HttpTimeoutException();
     }
 
-    public Task<HttpResponseMessage> EnsureSuccessResponse(HttpRequestMessage request, HttpResponseMessage response)
+    public Task<HttpResponseMessage> EnsureSuccessResponse(HttpRequestMessage request, HttpResponseMessage response) => response.IsSuccessStatusCode
+        ? Task.FromResult(response)
+        : HandleNotSuccessStatusCode(request, response);
+
+    private Task<HttpResponseMessage> HandleNotSuccessStatusCode(HttpRequestMessage request, HttpResponseMessage response)
     {
-        if (response.IsSuccessStatusCode)
-            return Task.FromResult(response);
+        if (response.Content.Headers.ContentType.MediaType == HttpContentType.Application.ProblemJson)
+            return HandleProblemDetailsResponse(request, response);
         else
-        {
-            if (response.Content.Headers.ContentType.MediaType == HttpContentType.Application.ProblemJson)
-                return HandleProblemDetailsResponse(request, response);
-            else
-                return HandleAnyResponse(request, response);
-        }
+            return HandleAnyResponse(request, response);
     }
 
     public async Task<HttpResponseMessage> HandleProblemDetailsResponse(HttpRequestMessage request, HttpResponseMessage response)

@@ -1,6 +1,6 @@
-﻿using Arbus.Network.Application.ContentSerializers;
+﻿using Arbus.Network.ContentSerializers;
 
-namespace Arbus.Network.Application;
+namespace Arbus.Network.Abstractions;
 
 public abstract class ApiEndpoint
 {

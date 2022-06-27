@@ -1,4 +1,4 @@
-﻿namespace Arbus.Network.Application;
+﻿namespace Arbus.Network;
 
 //
 // Summary:

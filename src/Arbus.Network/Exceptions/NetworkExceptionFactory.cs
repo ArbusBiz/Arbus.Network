@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Arbus.Network.Application.Exceptions;
+namespace Arbus.Network.Exceptions;
 
 public static class NetworkExceptionFactory
 {

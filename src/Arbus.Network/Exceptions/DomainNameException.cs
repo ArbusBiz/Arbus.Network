@@ -1,4 +1,4 @@
-﻿namespace Arbus.Network.Application.Exceptions;
+﻿namespace Arbus.Network.Exceptions;
 
 public class DomainNameException : NetworkException
 {

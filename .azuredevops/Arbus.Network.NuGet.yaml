@@ -40,7 +40,7 @@ stages:
 
   - stage: deploy
     displayName: Deploy
-    condition: and(succeeded(), not(eq(variables['Build.Reson'], 'PullRequest')))
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
     pool: 
       name: $(agentsPool)
     jobs:

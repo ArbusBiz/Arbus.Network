@@ -1,5 +1,5 @@
-﻿using Arbus.Network.Application;
-using Arbus.Network.Application.Exceptions;
+﻿using Arbus.Network.Abstractions;
+using Arbus.Network.Exceptions;
 
 namespace Arbus.Network.UnitTests.Application;
 

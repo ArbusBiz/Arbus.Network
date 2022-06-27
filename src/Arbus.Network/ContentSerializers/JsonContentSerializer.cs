@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Arbus.Network.Application.ContentSerializers;
+namespace Arbus.Network.ContentSerializers;
 
 public static class JsonContentSerializer
 {

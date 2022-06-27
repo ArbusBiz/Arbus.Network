@@ -2,21 +2,21 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Arbus.Network.Application.ContentSerializers;
+namespace Arbus.Network.ContentSerializers;
 
 public static class DefaultJsonSerializer
 {
     private static TimeSpan _maxDeserializationTime = TimeSpan.FromSeconds(5);
-    private static readonly JsonSerializerOptions _serializerOptions = new()
+    private static JsonSerializerOptions? _serializerOptions;
+
+    public static JsonSerializerOptions SerializerOptions
     {
-        PropertyNameCaseInsensitive = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-    };
+        get => _serializerOptions = GetDefaultSerializerOptions();
+        set => _serializerOptions = value;
+    }
 
     public static void Serialize<TValue>(Stream utf8Json, TValue value)
-        => JsonSerializer.Serialize(utf8Json, value, _serializerOptions);
+            => JsonSerializer.Serialize(utf8Json, value, _serializerOptions);
 
     public static string Serialize(object? value) => JsonSerializer.Serialize(value, _serializerOptions);
 
@@ -31,4 +31,12 @@ public static class DefaultJsonSerializer
         cancellationToken ??= new CancellationTokenSource(_maxDeserializationTime).Token;
         return JsonSerializer.DeserializeAsync<TValue>(utf8Json, _serializerOptions, cancellationToken.Value);
     }
+
+    public static JsonSerializerOptions GetDefaultSerializerOptions() => new()
+    {
+        PropertyNameCaseInsensitive = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
 }
