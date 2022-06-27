@@ -1,9 +1,8 @@
 variables:
   agentsPool: 'Building pool'
-  project: 'Arbus.Network.csproj'
+  project: '**/Arbus.Network.csproj'
   testProject: 'Arbus.Network.UnitTests.csproj'
-  artifact: 'ArbusNetwork.Artifact'
-  nugetFeed: 'Arbus feed'
+  nugetFeed: 'ArbusFeed'
 
 stages:
   - stage: build
@@ -24,7 +23,7 @@ stages:
           displayName: 'Build $(project)'
           inputs:
             command: build
-            projects: '**/$(project)'
+            projects: $(project)
             arguments: '-c Release -o $(Build.ArtifactStagingDirectory)/Binaries'
             outputDir: ''
         - task: DotNetCoreCLI@2
@@ -36,7 +35,6 @@ stages:
             testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'
         - publish: $(Build.ArtifactStagingDirectory)
           displayName: 'Publish $(artifact)'
-          artifact: $(artifact)
 
   - stage: deploy
     displayName: Deploy
@@ -51,11 +49,12 @@ stages:
         steps:
           - checkout: self
             fetchDepth: 1
+          - download: current
           - task: DotNetCoreCLI@2
             displayName: 'Pack $(project)'
             inputs:
               command: pack
-              projects: $(project)
+              searchPatternPack: $(project)
               arguments: '--no-build'
               versioningScheme: byEnvVar
               versionEnvVar: Build.SourceBranchName
