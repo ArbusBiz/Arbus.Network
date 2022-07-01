@@ -4,7 +4,7 @@
 // Summary:
 //     A machine-readable format for specifying errors in HTTP API responses based on
 //     https://tools.ietf.org/html/rfc7807.
-public class ProblemDetails
+public record ProblemDetails
 {
     //
     // Summary:

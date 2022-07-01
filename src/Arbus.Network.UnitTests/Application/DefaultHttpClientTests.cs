@@ -28,7 +28,7 @@ public class DefaultHttpClientTests : TestFixture
         var mockNetworkManager = CreateMock<INetworkManager>();
         mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(false);
 
-        DefaultHttpClient defaultHttpClient = new(default!, mockNetworkManager.Object, default!);
+        DefaultHttpClient defaultHttpClient = new(default!, mockNetworkManager.Object);
 
         Assert.Throws<NoNetoworkConnectionException>(() => defaultHttpClient.EnsureNetworkAvailable());
     }
@@ -39,7 +39,7 @@ public class DefaultHttpClientTests : TestFixture
         var mockNetworkManager = CreateMock<INetworkManager>();
         mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(true);
 
-        DefaultHttpClient defaultHttpClient = new(default!, mockNetworkManager.Object, default!);
+        DefaultHttpClient defaultHttpClient = new(default!, mockNetworkManager.Object);
 
         Assert.DoesNotThrow(() => defaultHttpClient.EnsureNetworkAvailable());
     }

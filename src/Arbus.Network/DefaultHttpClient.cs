@@ -2,7 +2,6 @@
 using Arbus.Network.ContentSerializers;
 using Arbus.Network.Exceptions;
 using Arbus.Network.Extensions;
-using Microsoft.Extensions.Logging;
 
 namespace Arbus.Network;
 
@@ -10,13 +9,11 @@ public class DefaultHttpClient : IDefaultHttpClient
 {
     private readonly INativeHttpClient _httpClient;
     private readonly INetworkManager _networkManager;
-    private readonly ILogger<DefaultHttpClient> _logger;
 
-    public DefaultHttpClient(INativeHttpClient httpClient, INetworkManager networkManager, ILogger<DefaultHttpClient> logger)
+    public DefaultHttpClient(INativeHttpClient httpClient, INetworkManager networkManager)
     {
         _httpClient = httpClient;
         _networkManager = networkManager;
-        _logger = logger;
     }
 
     public Task<string> GetString(string uri, TimeSpan? timeout = null) => GetString(new Uri(uri), timeout);
@@ -32,19 +29,17 @@ public class DefaultHttpClient : IDefaultHttpClient
 
     public async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        EnsureNetworkAvailable();
         using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         try
         {
             linkedTokenSource.CancelAfter(request.GetTimeout());
             var response = await _httpClient.Send(request, linkedTokenSource.Token).ConfigureAwait(false);
-            return await EnsureSuccessResponse(request, response).ConfigureAwait(false);
+            return await EnsureSuccessResponse(response).ConfigureAwait(false);
         }
-        catch (Exception e) when (cancellationToken.IsCancellationRequested is false)
+        catch (Exception) when (cancellationToken.IsCancellationRequested is false)
         {
-            EnsureNoTimeout(linkedTokenSource);
             EnsureNetworkAvailable();
-            _logger.LogError(e, "SendRequest");
+            EnsureNoTimeout(linkedTokenSource);
             throw;
         }
         finally
@@ -65,33 +60,29 @@ public class DefaultHttpClient : IDefaultHttpClient
             throw new HttpTimeoutException();
     }
 
-    public Task<HttpResponseMessage> EnsureSuccessResponse(HttpRequestMessage request, HttpResponseMessage response) => response.IsSuccessStatusCode
+    public virtual Task<HttpResponseMessage> EnsureSuccessResponse(HttpResponseMessage response) => response.IsSuccessStatusCode
         ? Task.FromResult(response)
-        : HandleNotSuccessStatusCode(request, response);
+        : HandleNotSuccessStatusCode(response);
 
-    private Task<HttpResponseMessage> HandleNotSuccessStatusCode(HttpRequestMessage request, HttpResponseMessage response)
+    public virtual Task<HttpResponseMessage> HandleNotSuccessStatusCode(HttpResponseMessage response)
     {
         if (response.Content.Headers.ContentType.MediaType == HttpContentType.Application.ProblemJson)
-            return HandleProblemDetailsResponse(request, response);
+            return HandleProblemDetailsResponse(response);
         else
-            return HandleAnyResponse(request, response);
+            return HandleAnyResponse(response);
     }
 
-    public async Task<HttpResponseMessage> HandleProblemDetailsResponse(HttpRequestMessage request, HttpResponseMessage response)
+    public async Task<HttpResponseMessage> HandleProblemDetailsResponse(HttpResponseMessage response)
     {
         var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
         var problemDetails = await DefaultJsonSerializer.DeserializeAsync<ProblemDetails>(responseStream).ConfigureAwait(false)
             ?? throw new Exception("Failed to deserialize ProblemDetails.");
-        _logger.LogWarning("{method} {url} {StatusCode} {IntStatusCode} {ProblemDetails}",
-            request.Method, request.RequestUri, response.StatusCode, (int)response.StatusCode, problemDetails);
         throw NetworkExceptionFactory.Create(response.StatusCode, problemDetails);
     }
 
-    public async Task<HttpResponseMessage> HandleAnyResponse(HttpRequestMessage request, HttpResponseMessage response)
+    public virtual async Task<HttpResponseMessage> HandleAnyResponse(HttpResponseMessage response)
     {
         var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        _logger.LogWarning("{method} {url} {StatusCode} {IntStatusCode} {Content}",
-            request.Method, request.RequestUri, response.StatusCode, (int)response.StatusCode, responseString);
         throw NetworkExceptionFactory.Create(response.StatusCode, responseString);
     }
 }
