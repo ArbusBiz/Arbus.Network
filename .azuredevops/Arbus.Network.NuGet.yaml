@@ -1,16 +1,13 @@
 variables:
-  agentsPool: 'Building pool'
   project: '**/Arbus.Network.csproj'
   testProject: 'Arbus.Network.UnitTests.csproj'
-  nugetFeed: 'ArbusFeed'
+  nugetFeed: 'NuGet.org'
 
 stages:
   - stage: build
     displayName: Build
     pool:
-      name:  $(agentsPool)
-      demands:
-        - agent.os -equals Windows_NT
+      vmImage: 'Windows-latest'
     jobs:
       - job: build_job
         displayName: Build

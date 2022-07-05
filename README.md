@@ -1,4 +1,4 @@
-# Arbus.Network
+# Arbus.Network [![Build Status](https://dev.azure.com/arbus/Arbus.Network/_apis/build/status/Arbus.Network?branchName=refs%2Fpull%2F1%2Fmerge)](https://dev.azure.com/arbus/Arbus.Network/_build/latest?definitionId=40&branchName=refs%2Fpull%2F1%2Fmerge)
 
 The library helps to start sending and receiving http requests via HttpClient just in a couple of steps. To begin:
 
