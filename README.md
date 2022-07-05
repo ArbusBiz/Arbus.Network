@@ -5,3 +5,7 @@ The library helps to start sending and receiving http requests via HttpClient ju
 To begin:
 1. Provide your own implementation or use default one for interfaces: INetworkManager, IDefaultHttpClient, INativeHttpClient.
 2. Use ApiEndpoint as base class for your API endpoints. The main purpose of ApiEndpoint class to provide a great way of separation of concerns.
+
+## Downloads ##
+
+The latest stable release of Arbus.Network is [available on NuGet](https://www.nuget.org/packages/Arbus.Network/).
