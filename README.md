@@ -1,14 +1,15 @@
 # Arbus.Network
 [![Build Status](https://dev.azure.com/arbus/Arbus.Network/_apis/build/status/Arbus.Network?branchName=refs%2Fpull%2F1%2Fmerge)](https://dev.azure.com/arbus/Arbus.Network/_build/latest?definitionId=40&branchName=refs%2Fpull%2F1%2Fmerge)
 
-Working with an HttpClient in C# could be quite tricky as for new and as for experienced software developers. Network code usually appeares to be duplicated in multiple projects. Such code is hard to maintain and improve.
-At Arbus, we are excited to share the network code we've been working on for more than two years. We wanted to write network code that'll be possible to reuse in wide range of solutions. There're two principles of software development we mostly kept in our minds: DRY and Single-reponsibility principiles. We beleave an Open Source community will attract pattionate developers like us. Everyone is welcome to contribute. Let's build a better world together.
+Working with an HttpClient in C# could be quite tricky as for new and as for experienced software developers. Network code usually appeares to be duplicated in multiple projects. Such code is hard to maintain and improve.  
+At Arbus, we are excited to share the network code we've been working on for more than two years. We wanted to write network code that'll be possible to reuse in wide range of solutions. There're two principles of software development we mostly kept in our minds: DRY and Single-reponsibility principiles. We beleave an Open Source community will attract pattionate developers like us. Everyone is welcome to contribute.  
+Let's build a better world together!
 
 ## Features
 - ApiEndpoints is the perfect place for request/response pair details.
 - HttpTimeout handling.
 - Built-in JSON support.
-- [ProblemDetails](https://tools.ietf.org/html/rfc7807) format support for not success responses.
+- [ProblemDetails](https://tools.ietf.org/html/rfc7807) format support for non-success responses.
 - Build-in NetworkExceptions.
 - Highly customizable for different needs
 
