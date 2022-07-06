@@ -7,7 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbus.Network", "Arbus.Netw
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2CDA7554-C709-4022-959A-666713C40375}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbus.Network.UnitTests", "Arbus.Network.UnitTests\Arbus.Network.UnitTests.csproj", "{543F51A1-B8F9-419F-A17B-42F91DE5511F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbus.Network.UnitTests", "Arbus.Network.UnitTests\Arbus.Network.UnitTests.csproj", "{543F51A1-B8F9-419F-A17B-42F91DE5511F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{8A88DC6F-EE5E-4DA4-A617-A122D71CE0C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbus.Network.Demo", "..\samples\Arbus.Network.Demo\Arbus.Network.Demo.csproj", "{E27C80DF-71B2-4C98-AA92-BF8359EBB49D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{09EDEC0E-4B46-457C-B2FE-70D7BC145AF6}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +32,10 @@ Global
 		{543F51A1-B8F9-419F-A17B-42F91DE5511F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{543F51A1-B8F9-419F-A17B-42F91DE5511F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{543F51A1-B8F9-419F-A17B-42F91DE5511F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27C80DF-71B2-4C98-AA92-BF8359EBB49D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27C80DF-71B2-4C98-AA92-BF8359EBB49D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27C80DF-71B2-4C98-AA92-BF8359EBB49D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27C80DF-71B2-4C98-AA92-BF8359EBB49D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +43,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0ADB1F8F-0D9C-422D-8800-6A2CE3F459EF} = {2CDA7554-C709-4022-959A-666713C40375}
 		{543F51A1-B8F9-419F-A17B-42F91DE5511F} = {2CDA7554-C709-4022-959A-666713C40375}
+		{E27C80DF-71B2-4C98-AA92-BF8359EBB49D} = {8A88DC6F-EE5E-4DA4-A617-A122D71CE0C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB655656-46D2-4C21-AE3C-90E95BD9E5BD}
