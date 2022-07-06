@@ -15,7 +15,7 @@ Let's build a better world together!
 
 ## How to use
 1. Provide your own implementation or use default one for interfaces: INetworkManager, INativeHttpClient, IDefaultHttpClient, IHttpClientContext.
-2. Use ApiEndpoint as base class for your API endpoints.
+2. Use ApiEndpoint as base class for your API endpoints.  
 Take a look at samples in the repo's root.
 
 ## Downloads
