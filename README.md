@@ -4,11 +4,16 @@
 The library helps to start sending and receiving http requests via HttpClient just in a couple of steps. 
 
 ## Features ##
-1. 
+- ApiEndpoints is the perfect place to the request/response details.
+- HttpTimeout timeout handling.
+- Built-in JSON support.
+- [ProblemDetails](https://tools.ietf.org/html/rfc7807) format support for not success responses.
+- Build-in NetworkExceptions.
 
 ## How to use ##
 1. Provide your own implementation or use default one for interfaces: INetworkManager, INativeHttpClient, IDefaultHttpClient, IHttpClientContext.
-2. Use ApiEndpoint as base class for your API endpoints. The main purpose of ApiEndpoint class to provide a great way of separation of concerns.
+2. Use ApiEndpoint as base class for your API endpoints.
+Take a look at samples in the repo's root.
 
 ## Downloads ##
 
