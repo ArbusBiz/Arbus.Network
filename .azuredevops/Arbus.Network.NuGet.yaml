@@ -37,7 +37,7 @@ stages:
     displayName: Deploy
     condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
     pool: 
-      name: $(agentsPool)
+      vmImage: 'Windows-latest'
     jobs:
       - job: pack
         displayName: Pack binaries
@@ -58,6 +58,7 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: 'Push to $(nugetFeed)'
             inputs:
-              command: push
+              command: 'push'
               packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
-              feedPublish: $(nugetFeed)
+              nuGetFeedType: 'external'
+              publishFeedCredentials: '$(nugetFeed)'
