@@ -1,8 +1,9 @@
 # Arbus.Network
 [![Build Status](https://dev.azure.com/arbus/Arbus.Network/_apis/build/status/Arbus.Network?branchName=refs%2Fpull%2F1%2Fmerge)](https://dev.azure.com/arbus/Arbus.Network/_build/latest?definitionId=40&branchName=refs%2Fpull%2F1%2Fmerge)
 
-Working with an HttpClient in C# could be quite tricky as for new and as for experienced software developers. Network code usually appeares to be duplicated in multiple projects. Such code is hard to maintain and improve.  
-At Arbus, we are excited to share the network code we've been working on for more than two years. We wanted to write network code that'll be possible to reuse in wide range of solutions. There're two principles of software development we mostly kept in our minds: DRY and Single-reponsibility principiles. We beleave an Open Source community will attract pattionate developers like us. Everyone is welcome to contribute.  
+Working with an HttpClient in C# could be quite tricky as for new and as for experienced software developers. Network code usually appears to be duplicated in multiple projects. Such code is hard to maintain and improve.  
+At Arbus, we are excited to share the network code we've been working on for more than two years. We wanted to write network code that'll be possible to reuse in wide range of solutions. There're two principles of software development we mostly kept in our minds: DRY and Single-responsibility principles. We believe an Open Source community will attract passionate developers like us. Everyone is welcome to contribute. 
+
 Let's build a better world together!
 
 ## Features
@@ -14,9 +15,29 @@ Let's build a better world together!
 - Highly customizable for different needs
 
 ## How to use
-1. Provide your own implementation or use default one for interfaces: INetworkManager, INativeHttpClient, IDefaultHttpClient, IHttpClientContext.
-2. Use ApiEndpoint as base class for your API endpoints.  
-Take a look at samples in the repo's root.
+1. Provide your own implementation or use default one for interfaces: INetworkManager, INativeHttpClient, IDefaultHttpClient, IHttpClientContext:
+   ```c#
+   _networkManager = new WindowsNetworkManager();
+   _nativeHttpClient = new WindowsHttpClient();
+   _defaulHttpClient = new DefaultHttpClient(_nativeHttpClient, _networkManager);
+   _httpClientContext = new HttpClientContext(_defaulHttpClient);
+
+2. Use ApiEndpoint as base class for your API endpoints:
+   ```c#
+   public class GetAllOrdersApiEndpoint : ApiEndpoint<OrdersResponseDto>
+   {
+       public override string Path => "https://example.com/api/v1/orders";
+       public override HttpMethod Method => HttpMethod.Get;
+   }
+   ```
+
+3. Run your endpoint:
+   ```c#
+   GetAllOrdersApiEndpoint endpoint = new();
+   var orders = await _httpClientContext.RunEndpoint(endpoint).ConfigureAwait(false);
+   ```
+
+  Take a look at samples in the repo's root.
 
 ## Downloads
 
