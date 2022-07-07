@@ -11,7 +11,7 @@ Let's build a better world together!
 - HttpTimeout handling.
 - Built-in JSON support.
 - [ProblemDetails](https://tools.ietf.org/html/rfc7807) format support for non-success responses.
-- Build-in NetworkExceptions.
+- Built-in NetworkExceptions.
 - Highly customizable for different needs
 
 ## How to use
