@@ -55,7 +55,7 @@ stages:
               arguments: '--no-build'
               versioningScheme: byEnvVar
               versionEnvVar: Build.SourceBranchName
-          - task: DotNetCoreCLI@2
+          - task: NuGetCommand@2
             displayName: 'Push to $(nugetFeed)'
             inputs:
               command: 'push'
