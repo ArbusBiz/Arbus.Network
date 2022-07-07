@@ -37,7 +37,7 @@ stages:
     displayName: Deploy
     condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
     pool: 
-      name: $(agentsPool)
+      vmImage: 'Windows-latest'
     jobs:
       - job: pack
         displayName: Pack binaries
