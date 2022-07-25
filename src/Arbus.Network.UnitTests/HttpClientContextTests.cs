@@ -19,4 +19,16 @@ public class HttpClientContextTests : TestFixture
 
         await httpClientContext.RunEndpointInternal(mockApiEndpoint);
     }
+
+    [Test]
+    public async Task RunEndpointInternal_InvokesSendRequestWithDefaultCancellationToken()
+    {
+        var mockApiEndpoint = Mock.Of<ApiEndpoint>(x => x.Path == "http://localhost" && x.Method == HttpMethod.Get);
+        var mockDefaultHttpClient = CreateMock<IDefaultHttpClient>();
+        mockDefaultHttpClient.Setup(x => x.SendRequest(It.IsAny<HttpRequestMessage>(), default)).ReturnsAsync(new HttpResponseMessage());
+
+        HttpClientContext httpClientContext = new(mockDefaultHttpClient.Object);
+
+        await httpClientContext.RunEndpointInternal(mockApiEndpoint);
+    }
 }
