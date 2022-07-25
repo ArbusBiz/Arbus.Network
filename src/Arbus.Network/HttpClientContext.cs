@@ -6,11 +6,11 @@ namespace Arbus.Network;
 
 public class HttpClientContext : IHttpClientContext
 {
-    protected IDefaultHttpClient _httpClientHandler;
+    protected IDefaultHttpClient _defaultHttpClient;
 
     public HttpClientContext(IDefaultHttpClient httpClientHandler)
     {
-        _httpClientHandler = httpClientHandler;
+        _defaultHttpClient = httpClientHandler;
     }
 
     public async Task RunEndpoint(ApiEndpoint endpoint)
@@ -50,7 +50,7 @@ public class HttpClientContext : IHttpClientContext
 
         AddHeaders(request.Headers);
 
-        return _httpClientHandler.SendRequest(request, default);
+        return _defaultHttpClient.SendRequest(request, endpoint.CancellationToken ?? default);
     }
 
     protected virtual Uri GetUri(string uri) => new(uri);
