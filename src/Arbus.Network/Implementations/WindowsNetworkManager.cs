@@ -1,6 +1,5 @@
 ﻿using Arbus.Network.Abstractions;
 using System.Net.NetworkInformation;
-using static Arbus.Network.Abstractions.INetworkManager;
 
 namespace Arbus.Network.Implementations;
 
