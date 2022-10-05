@@ -1,6 +1,4 @@
-﻿using System.Net.NetworkInformation;
-
-namespace Arbus.Network.Abstractions;
+﻿namespace Arbus.Network.Abstractions;
 
 public interface INetworkManager
 {
