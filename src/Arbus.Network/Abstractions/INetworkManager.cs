@@ -5,5 +5,5 @@ namespace Arbus.Network.Abstractions;
 public interface INetworkManager
 {
     bool IsNetworkAvailable { get; }
-    public EventHandler<bool>? NetworkStatusChangedEventHandler { get; set; }
+    public event EventHandler<bool>? NetworkStatusChangedEventHandler;
 }

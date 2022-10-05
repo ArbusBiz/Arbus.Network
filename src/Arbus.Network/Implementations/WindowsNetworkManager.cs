@@ -7,11 +7,7 @@ namespace Arbus.Network.Implementations;
 public class WindowsNetworkManager : INetworkManager
 {
     [Obsolete("Not implemented yet", error: true)]
-    public EventHandler<bool>? NetworkStatusChangedEventHandler { get; set; }
-
-    public WindowsNetworkManager()
-    {
-    }
+    public event EventHandler<bool>? NetworkStatusChangedEventHandler;
 
     public bool IsNetworkAvailable => GetIsNetworkAvailable();
 
