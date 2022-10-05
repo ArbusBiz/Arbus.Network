@@ -6,11 +6,11 @@ namespace Arbus.Network.Implementations;
 
 public class WindowsNetworkManager : INetworkManager
 {
-    public NetworkAvailabilityChangedEventHandler? NetworkAvailabilityChangedEventHandler { get; set; }
+    [Obsolete("Not implemented yet", error: true)]
+    public EventHandler<bool>? NetworkStatusChangedEventHandler { get; set; }
 
     public WindowsNetworkManager()
     {
-        NetworkChange.NetworkAvailabilityChanged += NetworkAvailabilityChangedEventHandler;
     }
 
     public bool IsNetworkAvailable => GetIsNetworkAvailable();
