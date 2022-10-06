@@ -3,4 +3,5 @@
 public interface INetworkManager
 {
     bool IsNetworkAvailable { get; }
+    public event EventHandler<bool>? NetworkAvailabilityChanged;
 }

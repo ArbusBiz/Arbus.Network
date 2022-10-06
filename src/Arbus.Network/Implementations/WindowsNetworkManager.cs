@@ -5,6 +5,8 @@ namespace Arbus.Network.Implementations;
 
 public class WindowsNetworkManager : INetworkManager
 {
+    public event EventHandler<bool>? NetworkAvailabilityChanged;
+
     public bool IsNetworkAvailable => GetIsNetworkAvailable();
 
     //NetworkInterface.GetIsNetworkAvailable() always returns 'true' for Xamarin.Ios and Xamarin.Android
