@@ -1,5 +1,5 @@
 # Arbus.Network
-[![Build Status](https://dev.azure.com/arbus/Arbus.Network/_apis/build/status/Arbus.Network?branchName=refs%2Fpull%2F1%2Fmerge)](https://dev.azure.com/arbus/Arbus.Network/_build/latest?definitionId=40&branchName=refs%2Fpull%2F1%2Fmerge)
+[![Build Status](https://dev.azure.com/arbus/Arbus.Network/_apis/build/status/Arbus.Network?branchName=master)](https://dev.azure.com/arbus/Arbus.Network/_build/latest?definitionId=40&branchName=master)
 
 Working with an HttpClient in C# could be quite tricky as for new and as for experienced software developers. Network code usually appears to be duplicated in multiple projects. Such code is hard to maintain and improve.  
 At Arbus, we are excited to share the network code we've been working on for more than two years. We wanted to write network code that'll be possible to reuse in wide range of solutions. There're two principles of software development we mostly kept in our minds: DRY and Single-responsibility principles. We believe an Open Source community will attract passionate developers like us. Everyone is welcome to contribute. 
