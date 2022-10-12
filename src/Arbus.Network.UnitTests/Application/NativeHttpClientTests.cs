@@ -3,7 +3,7 @@ using Arbus.Network.Exceptions;
 
 namespace Arbus.Network.UnitTests.Application;
 
-public class DefaultHttpClientTests : TestFixture
+public class NativeHttpClientTests : TestFixture
 {
     [Test]
     public void EnsureNoTimeout_CancellationRequested_ThrowsHttpTimeoutException()
@@ -11,7 +11,7 @@ public class DefaultHttpClientTests : TestFixture
         var canceallationTokenSource = new CancellationTokenSource();
         canceallationTokenSource.Cancel();
 
-        Assert.Throws<HttpTimeoutException>(() => DefaultHttpClient.EnsureNoTimeout(canceallationTokenSource));
+        Assert.Throws<HttpTimeoutException>(() => NativeHttpClient.EnsureNoTimeout(canceallationTokenSource));
     }
 
     [Test]
@@ -19,7 +19,7 @@ public class DefaultHttpClientTests : TestFixture
     {
         var canceallationTokenSource = new CancellationTokenSource();
 
-        Assert.DoesNotThrow(() => DefaultHttpClient.EnsureNoTimeout(canceallationTokenSource));
+        Assert.DoesNotThrow(() => NativeHttpClient.EnsureNoTimeout(canceallationTokenSource));
     }
 
     [Test]
@@ -28,9 +28,9 @@ public class DefaultHttpClientTests : TestFixture
         var mockNetworkManager = CreateMock<INetworkManager>();
         mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(false);
 
-        DefaultHttpClient defaultHttpClient = new(default!, mockNetworkManager.Object);
+        NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
 
-        Assert.Throws<NoNetoworkConnectionException>(() => defaultHttpClient.EnsureNetworkAvailable());
+        Assert.Throws<NoNetoworkConnectionException>(() => nativeHttpClient.EnsureNetworkAvailable());
     }
 
     [Test]
@@ -39,8 +39,8 @@ public class DefaultHttpClientTests : TestFixture
         var mockNetworkManager = CreateMock<INetworkManager>();
         mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(true);
 
-        DefaultHttpClient defaultHttpClient = new(default!, mockNetworkManager.Object);
+        NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
 
-        Assert.DoesNotThrow(() => defaultHttpClient.EnsureNetworkAvailable());
+        Assert.DoesNotThrow(() => nativeHttpClient.EnsureNetworkAvailable());
     }
 }
