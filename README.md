@@ -15,12 +15,11 @@ Let's build a better world together!
 - Highly customizable for different needs
 
 ## How to use
-1. Provide your own implementation or use default one for interfaces: INetworkManager, INativeHttpClient, IDefaultHttpClient, IHttpClientContext:
+1. Provide your own implementation or use default one for interfaces: INetworkManager, INativeHttpClient, IHttpClientContext:
    ```c#
    _networkManager = new WindowsNetworkManager();
    _nativeHttpClient = new WindowsHttpClient();
-   _defaulHttpClient = new DefaultHttpClient(_nativeHttpClient, _networkManager);
-   _httpClientContext = new HttpClientContext(_defaulHttpClient);
+   _httpClientContext = new HttpClientContext(_nativeHttpClient);
 
 2. Use ApiEndpoint as base class for your API endpoints:
    ```c#
