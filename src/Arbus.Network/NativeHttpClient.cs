@@ -2,18 +2,25 @@
 using Arbus.Network.ContentSerializers;
 using Arbus.Network.Exceptions;
 using Arbus.Network.Extensions;
+using System.Net.Http.Headers;
 
 namespace Arbus.Network;
 
-public class DefaultHttpClient : IDefaultHttpClient
+public class NativeHttpClient : INativeHttpClient
 {
-    private readonly INativeHttpClient _httpClient;
+    private static readonly HttpClient _httpClient = new();
     private readonly INetworkManager _networkManager;
 
-    public DefaultHttpClient(INativeHttpClient httpClient, INetworkManager networkManager)
+    public NativeHttpClient(INetworkManager networkManager)
     {
-        _httpClient = httpClient;
         _networkManager = networkManager;
+    }
+    
+    public NativeHttpClient(INetworkManager networkManager, ProductInfoHeaderValue userAgent)
+    {
+        _networkManager = networkManager;
+        _httpClient.DefaultRequestHeaders.UserAgent.Add(userAgent);
+
     }
 
     public Task<string> GetString(string uri, TimeSpan? timeout = null) => GetString(new Uri(uri), timeout);
@@ -27,13 +34,18 @@ public class DefaultHttpClient : IDefaultHttpClient
         return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
     }
 
+    public virtual Task<HttpResponseMessage> Send(HttpRequestMessage httpRequest, CancellationToken timeout, HttpCompletionOption httpCompletionOption = HttpCompletionOption.ResponseHeadersRead)
+    {
+        return _httpClient.SendAsync(httpRequest, httpCompletionOption, timeout);
+    }
+
     public async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         try
         {
             linkedTokenSource.CancelAfter(request.GetTimeout());
-            var response = await _httpClient.Send(request, linkedTokenSource.Token).ConfigureAwait(false);
+            var response = await Send(request, linkedTokenSource.Token).ConfigureAwait(false);
             return await EnsureSuccessResponse(response).ConfigureAwait(false);
         }
         catch (Exception) when (cancellationToken.IsCancellationRequested is false)

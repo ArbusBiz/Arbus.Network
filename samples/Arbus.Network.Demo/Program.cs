@@ -8,15 +8,13 @@ public static class Program
 {
     private static readonly INetworkManager _networkManager;
     private static readonly INativeHttpClient _nativeHttpClient;
-    private static readonly IDefaultHttpClient _defaulHttpClient;
     private static readonly IHttpClientContext _httpClientContext;
 
     static Program()
     {
         _networkManager = new WindowsNetworkManager();
-        _nativeHttpClient = new WindowsHttpClient();
-        _defaulHttpClient = new DefaultHttpClient(_nativeHttpClient, _networkManager);
-        _httpClientContext = new HttpClientContext(_defaulHttpClient);
+        _nativeHttpClient = new WindowsHttpClient(_networkManager);
+        _httpClientContext = new HttpClientContext(_nativeHttpClient);
     }
 
     public static async Task Main()

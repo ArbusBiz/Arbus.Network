@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using Arbus.Network.Abstractions;
+using System.Net;
 using System.Net.Http.Headers;
 
 namespace Arbus.Network.Implementations;
 
-public class WindowsHttpClient : GeneralHttpClient
+public class WindowsHttpClient : NativeHttpClient
 {
     static WindowsHttpClient()
     {
@@ -16,12 +17,12 @@ public class WindowsHttpClient : GeneralHttpClient
         }
     }
 
-    public WindowsHttpClient() : base()
+    public WindowsHttpClient(INetworkManager networkManager) : base(networkManager)
     {
 
     }
 
-    public WindowsHttpClient(ProductInfoHeaderValue userAgent) : base(userAgent)
+    public WindowsHttpClient(INetworkManager networkManager, ProductInfoHeaderValue userAgent) : base(networkManager, userAgent)
     {
     }
 }
