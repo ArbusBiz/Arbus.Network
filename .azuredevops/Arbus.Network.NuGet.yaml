@@ -5,70 +5,57 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
-  - stage: build
-    displayName: Build
+  - stage: tests
+    displayName: Tests
     pool:
       vmImage: 'Windows-latest'
     jobs:
-      - job: build_job
-        displayName: Build
-        workspace:
-          clean: outputs
+      - job: test_job
+        displayName: Tests
         steps:
         - checkout: self
           fetchDepth: 1
-        - task: Assembly-Info-NetCore@3
-          displayName: Set assembly info
-          condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-          inputs:
-            Path: '$(Build.SourcesDirectory)'
-            FileNames: '$(project)'
-            InsertAttributes: true
-            FileEncoding: 'auto'
-            WriteBOM: false
-            VersionNumber: '$(Build.SourceBranchName)'
-            PackageVersion: '$(Build.SourceBranchName)'
-            LogLevel: 'verbose'
-            FailOnWarning: false
-            DisableTelemetry: false
         - task: DotNetCoreCLI@2
-          displayName: 'Build $(project)'
-          inputs:
-            command: build
-            projects: $(project)
-            arguments: '-c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/Binaries'
-            outputDir: ''
-        - task: DotNetCoreCLI@2
-          displayName: 'Run $(testProject)'
+          displayName: 'Run UnitTests'
           inputs:
             command: test
             projects: '**/$(testProject)'
-            arguments: '-c Release -s src/tests.runsettings'
+            arguments: '-c $(buildConfiguration) -s src/tests.runsettings'
             testRunTitle: '$(Build.DefinitionName)_$(Build.SourceBranchName)_$(Build.BuildNumber)'
-        - publish: $(Build.ArtifactStagingDirectory)
-          displayName: 'Publish $(artifact)'
 
   - stage: deploy
     displayName: Deploy
+    dependsOn: tests
     condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
     pool: 
       vmImage: 'Windows-latest'
     jobs:
       - job: pack
-        displayName: Pack binaries
+        displayName: Pack NuGet
         workspace:
           clean: all
         steps:
           - checkout: self
             fetchDepth: 1
-          - download: current
+          - task: Assembly-Info-NetCore@3
+            displayName: Set assembly info
+            inputs:
+              Path: '$(Build.SourcesDirectory)'
+              FileNames: '$(project)'
+              InsertAttributes: true
+              FileEncoding: 'auto'
+              WriteBOM: false
+              VersionNumber: '$(Build.SourceBranchName)'
+              PackageVersion: '$(Build.SourceBranchName)'
+              LogLevel: 'verbose'
+              FailOnWarning: false
+              DisableTelemetry: false
           - task: DotNetCoreCLI@2
             displayName: 'Pack $(project)'
             inputs:
               command: pack
               searchPatternPack: $(project)
               configuration: $(buildConfiguration)
-              nobuild: true
               versioningScheme: byEnvVar
               versionEnvVar: Build.SourceBranchName
           - task: NuGetCommand@2
