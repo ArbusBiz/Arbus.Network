@@ -2,6 +2,7 @@ variables:
   project: '**/Arbus.Network.csproj'
   testProject: 'Arbus.Network.UnitTests.csproj'
   nugetFeed: 'NuGet.org'
+  buildConfiguration: 'Release'
 
 stages:
   - stage: build
@@ -16,7 +17,6 @@ stages:
         steps:
         - checkout: self
           fetchDepth: 1
-
         - task: Assembly-Info-NetCore@3
           displayName: Set assembly info
           condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
@@ -27,16 +27,16 @@ stages:
             FileEncoding: 'auto'
             WriteBOM: false
             VersionNumber: '$(Build.SourceBranchName)'
+            PackageVersion: '$(Build.SourceBranchName)'
             LogLevel: 'verbose'
             FailOnWarning: false
             DisableTelemetry: false
-
         - task: DotNetCoreCLI@2
           displayName: 'Build $(project)'
           inputs:
             command: build
             projects: $(project)
-            arguments: '-c Release -o $(Build.ArtifactStagingDirectory)/Binaries'
+            arguments: '-c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/Binaries'
             outputDir: ''
         - task: DotNetCoreCLI@2
           displayName: 'Run $(testProject)'
@@ -67,7 +67,8 @@ stages:
             inputs:
               command: pack
               searchPatternPack: $(project)
-              arguments: '--no-build'
+              configuration: $(buildConfiguration)
+              nobuild: true
               versioningScheme: byEnvVar
               versionEnvVar: Build.SourceBranchName
           - task: NuGetCommand@2
