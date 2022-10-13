@@ -4,11 +4,12 @@ variables:
   nugetFeed: 'NuGet.org'
   buildConfiguration: 'Release'
 
+pool:
+  vmImage: 'Windows-latest'
+
 stages:
   - stage: tests
     displayName: Tests
-    pool:
-      vmImage: 'Windows-latest'
     jobs:
       - job: test_job
         displayName: Tests
@@ -27,8 +28,6 @@ stages:
     displayName: Deploy
     dependsOn: tests
     condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-    pool: 
-      vmImage: 'Windows-latest'
     jobs:
       - job: pack
         displayName: Pack NuGet
