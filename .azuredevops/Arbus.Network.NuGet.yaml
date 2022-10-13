@@ -18,14 +18,15 @@ stages:
           fetchDepth: 1
 
         - task: Assembly-Info-NetCore@3
-          displayName: Set Assembly.cs parameters
+          displayName: Set assembly info
           inputs:
             Path: '$(Build.SourcesDirectory)'
             FileNames: '$(project)'
-            InsertAttributes: false
+            InsertAttributes: true
             FileEncoding: 'auto'
             WriteBOM: false
             VersionNumber: '$(Build.SourceBranchName)'
+            FileVersionNumber: 
             LogLevel: 'verbose'
             FailOnWarning: false
             DisableTelemetry: false
