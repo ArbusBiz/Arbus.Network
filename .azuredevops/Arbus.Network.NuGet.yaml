@@ -16,6 +16,20 @@ stages:
         steps:
         - checkout: self
           fetchDepth: 1
+
+        - task: Assembly-Info-NetCore@3
+          displayName: Set Assembly.cs parameters
+          inputs:
+            Path: '$(Build.SourcesDirectory)'
+            FileNames: '$(project)'
+            InsertAttributes: false
+            FileEncoding: 'auto'
+            WriteBOM: false
+            VersionNumber: '$(Build.SourceBranchName)'
+            LogLevel: 'verbose'
+            FailOnWarning: false
+            DisableTelemetry: false
+
         - task: DotNetCoreCLI@2
           displayName: 'Build $(project)'
           inputs:
