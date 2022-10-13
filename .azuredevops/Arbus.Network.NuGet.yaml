@@ -19,6 +19,7 @@ stages:
 
         - task: Assembly-Info-NetCore@3
           displayName: Set assembly info
+          condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
           inputs:
             Path: '$(Build.SourcesDirectory)'
             FileNames: '$(project)'
@@ -26,7 +27,6 @@ stages:
             FileEncoding: 'auto'
             WriteBOM: false
             VersionNumber: '$(Build.SourceBranchName)'
-            FileVersionNumber: 
             LogLevel: 'verbose'
             FailOnWarning: false
             DisableTelemetry: false
