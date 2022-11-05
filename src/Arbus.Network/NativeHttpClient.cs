@@ -78,7 +78,7 @@ public class NativeHttpClient : INativeHttpClient
 
     public virtual Task<HttpResponseMessage> HandleNotSuccessStatusCode(HttpResponseMessage response)
     {
-        if (response.Content.Headers.ContentType.MediaType == HttpContentType.Application.ProblemJson)
+        if (response.Content.Headers.ContentType?.MediaType == HttpContentType.Application.ProblemJson)
             return HandleProblemDetailsResponse(response);
         else
             return HandleAnyResponse(response);
