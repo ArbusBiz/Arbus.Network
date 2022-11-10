@@ -8,8 +8,9 @@
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Authors>ArbusBiz</Authors>
-		<Description>All the best practicies of using the HttpClient in just one library.</Description>
+		<Description>All the best practices of using the HttpClient in just one library.</Description>
 		<RepositoryUrl>https://github.com/ArbusBiz/Arbus.Network</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/ArbusBiz/Arbus.Network</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="System.Text.Json" Version="6.0.5" />
