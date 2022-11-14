@@ -8,19 +8,20 @@ namespace Arbus.Network;
 
 public class NativeHttpClient : INativeHttpClient
 {
-    private static readonly HttpClient _httpClient = new();
+    private static readonly HttpClient _httpClient = new()
+    {
+        Timeout = Timeout.InfiniteTimeSpan
+    };
     private readonly INetworkManager _networkManager;
+
+    public NativeHttpClient(INetworkManager networkManager, ProductInfoHeaderValue userAgent) : this(networkManager)
+    {
+        _httpClient.DefaultRequestHeaders.UserAgent.Add(userAgent);
+    }
 
     public NativeHttpClient(INetworkManager networkManager)
     {
         _networkManager = networkManager;
-    }
-    
-    public NativeHttpClient(INetworkManager networkManager, ProductInfoHeaderValue userAgent)
-    {
-        _networkManager = networkManager;
-        _httpClient.DefaultRequestHeaders.UserAgent.Add(userAgent);
-
     }
 
     public Task<string> GetString(string uri, TimeSpan? timeout = null) => GetString(new Uri(uri), timeout);
@@ -34,24 +35,18 @@ public class NativeHttpClient : INativeHttpClient
         return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
     }
 
-    public virtual Task<HttpResponseMessage> Send(HttpRequestMessage httpRequest, CancellationToken timeout, HttpCompletionOption httpCompletionOption = HttpCompletionOption.ResponseHeadersRead)
+    public virtual async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, CancellationToken cancellationToken, HttpCompletionOption httpCompletionOption = HttpCompletionOption.ResponseHeadersRead)
     {
-        return _httpClient.SendAsync(httpRequest, httpCompletionOption, timeout);
-    }
-
-    public async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        using var timeoutCts = GetTimeoutCts(request, cancellationToken);
         try
         {
-            linkedTokenSource.CancelAfter(request.GetTimeout());
-            var response = await Send(request, linkedTokenSource.Token).ConfigureAwait(false);
+            var response = await _httpClient.SendAsync(request, httpCompletionOption, timeoutCts?.Token ?? cancellationToken).ConfigureAwait(false);
             return await EnsureSuccessResponse(response).ConfigureAwait(false);
         }
         catch (Exception) when (cancellationToken.IsCancellationRequested is false)
         {
             EnsureNetworkAvailable();
-            EnsureNoTimeout(linkedTokenSource);
+            EnsureNoTimeout(timeoutCts);
             throw;
         }
         finally
@@ -60,15 +55,28 @@ public class NativeHttpClient : INativeHttpClient
         }
     }
 
+    public static CancellationTokenSource? GetTimeoutCts(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var timeout = request.GetTimeout();
+        var hasTimeout = timeout != Timeout.InfiniteTimeSpan;
+        if (hasTimeout)
+        {
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            cts.CancelAfter(timeout);
+            return cts;
+        }
+        return default;
+    }
+
     public void EnsureNetworkAvailable()
     {
         if (_networkManager.IsNetworkAvailable is false)
             throw new NoNetoworkConnectionException();
     }
 
-    public static void EnsureNoTimeout(CancellationTokenSource linkedTokenSource)
+    public static void EnsureNoTimeout(CancellationTokenSource? cts)
     {
-        if (linkedTokenSource.IsCancellationRequested)
+        if (cts != null && cts.IsCancellationRequested)
             throw new HttpTimeoutException();
     }
 
@@ -84,7 +92,7 @@ public class NativeHttpClient : INativeHttpClient
             return HandleAnyResponse(response);
     }
 
-    public async Task<HttpResponseMessage> HandleProblemDetailsResponse(HttpResponseMessage response)
+    public static async Task<HttpResponseMessage> HandleProblemDetailsResponse(HttpResponseMessage response)
     {
         var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
         var problemDetails = await DefaultJsonSerializer.DeserializeAsync<ProblemDetails>(responseStream).ConfigureAwait(false)
