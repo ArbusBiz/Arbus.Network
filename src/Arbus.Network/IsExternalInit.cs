@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace System.Runtime.CompilerServices
+namespace Arbus.Network
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal static class IsExternalInit { }

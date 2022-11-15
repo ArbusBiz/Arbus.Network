@@ -2,16 +2,28 @@
 
 public static class HttpRequestExtensions
 {
-    private const string _timeoutProperyKey = "Timeout";
-    private const int _defaultTimeoutInSeconds = 20;
+    private const string _key = "Timeout";
+    private static readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(100);
+#if NET6_0_OR_GREATER
+    private static HttpRequestOptionsKey<TimeSpan> _optionsKey = new(_key);
+#endif
 
     public static void SetTimeout(this HttpRequestMessage request, TimeSpan timeout)
-        => request.Properties[_timeoutProperyKey] = timeout;
+#if NETSTANDARD
+        => request.Properties[_key] = timeout;
+#else
+        => request.Options.Set(_optionsKey, timeout);
+#endif
 
     public static TimeSpan GetTimeout(this HttpRequestMessage request)
     {
-        return request.Properties.TryGetValue(_timeoutProperyKey, out object value)
-            ? (TimeSpan)value
-            : TimeSpan.FromSeconds(_defaultTimeoutInSeconds);
+#if NETSTANDARD
+        if (request.Properties.TryGetValue(_key, out object value))
+            return (TimeSpan)value;
+        return _defaultTimeout;
+#else
+        return request.Options.TryGetValue(_optionsKey, out var value)
+            ? value : _defaultTimeout;
+#endif
     }
 }

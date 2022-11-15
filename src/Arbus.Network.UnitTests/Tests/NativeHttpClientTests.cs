@@ -1,7 +1,8 @@
 ﻿using Arbus.Network.Abstractions;
 using Arbus.Network.Exceptions;
+using Arbus.Network.Extensions;
 
-namespace Arbus.Network.UnitTests.Application;
+namespace Arbus.Network.UnitTests.Tests;
 
 public class NativeHttpClientTests : TestFixture
 {
@@ -42,5 +43,40 @@ public class NativeHttpClientTests : TestFixture
         NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
 
         Assert.DoesNotThrow(() => nativeHttpClient.EnsureNetworkAvailable());
+    }
+
+    [Test]
+    public void GetTimeoutCts_InfiniteTimeSpan_AssertNullCts()
+    {
+        using HttpRequestMessage timeout = new();
+        timeout.SetTimeout(Timeout.InfiniteTimeSpan);
+
+        var cts = NativeHttpClient.GetTimeoutCts(timeout, default);
+
+        Assert.IsNull(cts);
+    }
+
+    [Test]
+    public void GetTimeoutCts_NotInfiniteTimeSpan_AssertNotNUllCts()
+    {
+        using HttpRequestMessage timeout = new();
+        timeout.SetTimeout(TimeSpan.FromSeconds(1));
+
+        using var cts = NativeHttpClient.GetTimeoutCts(timeout, default);
+        
+        Assert.NotNull(cts);
+    }
+
+    [Test]
+    public void GetTimeoutCts_CancellFirstToken_AssertSecondIsCancelled()
+    {
+        using HttpRequestMessage timeout = new();
+        timeout.SetTimeout(TimeSpan.FromSeconds(1));
+        using var cts1 = new CancellationTokenSource();
+        cts1.Cancel();
+
+        using var cts2 = NativeHttpClient.GetTimeoutCts(timeout, cts1.Token);
+        
+        Assert.IsTrue(cts2?.Token.IsCancellationRequested);
     }
 }
