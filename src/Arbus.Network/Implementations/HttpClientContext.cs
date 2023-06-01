@@ -1,8 +1,7 @@
 ﻿using Arbus.Network.Abstractions;
-using Arbus.Network.Extensions;
 using System.Net.Http.Headers;
 
-namespace Arbus.Network;
+namespace Arbus.Network.Implementations;
 
 public class HttpClientContext : IHttpClientContext
 {
@@ -21,39 +20,34 @@ public class HttpClientContext : IHttpClientContext
     public async Task<T> RunEndpoint<T>(ApiEndpoint<T> endpoint)
     {
         using var response = await RunEndpointInternal(endpoint).ConfigureAwait(false);
-        return await endpoint.GetResponse(response.Content).ConfigureAwait(false);
+        return await endpoint.GetResponse(response).ConfigureAwait(false);
     }
 
+    [Obsolete("Create an issue on GitHub if in use")]
     public async Task<TStream> RunStreamEndpoint<TStream>(ApiEndpoint<TStream> endpoint) where TStream : Stream
     {
         var response = await RunEndpointInternal(endpoint).ConfigureAwait(false);
-        return await endpoint.GetResponse(response.Content).ConfigureAwait(false);
+        return await endpoint.GetResponse(response).ConfigureAwait(false);
     }
 
+    [Obsolete("Create an issue on GitHub if in use")]
     public async Task<THttpContent> RunHttpContentEndpoint<THttpContent>(ApiEndpoint<THttpContent> endpoint) where THttpContent : HttpContent
     {
         var response = await RunEndpointInternal(endpoint).ConfigureAwait(false);
-        return await endpoint.GetResponse(response.Content).ConfigureAwait(false);
+        return await endpoint.GetResponse(response).ConfigureAwait(false);
     }
 
     public virtual Task<HttpResponseMessage> RunEndpointInternal(ApiEndpoint endpoint)
     {
-        var request = new HttpRequestMessage(endpoint.Method, GetUri(endpoint.Path));
-        request.SetTimeout(endpoint.Timeout);
-        request.Content = endpoint.CreateContent();
-
-        if (endpoint.AdditionalHeaders is not null)
-        {
-            foreach (var header in endpoint.AdditionalHeaders)
-                request.Headers.TryAddWithoutValidation(header.Key, header.Value);
-        }
+        var request = endpoint.CreateRequest(
+            GetBaseUrl());
 
         AddHeaders(request.Headers);
 
         return _nativeHttpClient.SendRequest(request, endpoint.CancellationToken ?? default);
     }
 
-    protected virtual Uri GetUri(string uri) => new(uri);
+    public virtual Uri? GetBaseUrl() => default;
 
     protected virtual void AddHeaders(HttpRequestHeaders headers)
     {

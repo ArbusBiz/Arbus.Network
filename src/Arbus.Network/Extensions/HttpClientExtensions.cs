@@ -4,6 +4,6 @@ namespace Arbus.Network.Extensions;
 
 public static class HttpClientExtensions
 {
-    public static void SetUserAgentHeader(this HttpClient request, ProductInfoHeaderValue productInfoHeader)
-        => request.DefaultRequestHeaders.UserAgent.Add(productInfoHeader);
+    public static void SetUserAgentHeader(this HttpClient httpClient, ProductInfoHeaderValue productInfoHeader)
+        => httpClient.DefaultRequestHeaders.UserAgent.Add(productInfoHeader);
 }

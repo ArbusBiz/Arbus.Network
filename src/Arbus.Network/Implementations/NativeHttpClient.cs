@@ -1,14 +1,13 @@
 ﻿using Arbus.Network.Abstractions;
-using Arbus.Network.ContentSerializers;
 using Arbus.Network.Exceptions;
 using Arbus.Network.Extensions;
 using System.Net.Http.Headers;
 
-namespace Arbus.Network;
+namespace Arbus.Network.Implementations;
 
 public class NativeHttpClient : INativeHttpClient
 {
-    private static readonly HttpClient _httpClient = new()
+    protected static readonly HttpClient _httpClient = new()
     {
         Timeout = Timeout.InfiniteTimeSpan
     };
@@ -95,7 +94,7 @@ public class NativeHttpClient : INativeHttpClient
     public static async Task<HttpResponseMessage> HandleProblemDetailsResponse(HttpResponseMessage response)
     {
         var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-        var problemDetails = await DefaultJsonSerializer.DeserializeAsync<ProblemDetails>(responseStream).ConfigureAwait(false)
+        var problemDetails = await JsonSerializer.DeserializeAsync<ProblemDetails>(responseStream, GlobalJsonSerializerOptions.Options).ConfigureAwait(false)
             ?? throw new Exception("Failed to deserialize ProblemDetails.");
         throw NetworkExceptionFactory.Create(response.StatusCode, problemDetails);
     }
