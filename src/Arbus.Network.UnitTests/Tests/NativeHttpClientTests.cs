@@ -1,32 +1,33 @@
 ﻿using Arbus.Network.Abstractions;
 using Arbus.Network.Exceptions;
 using Arbus.Network.Extensions;
+using Arbus.Network.Implementations;
 
 namespace Arbus.Network.UnitTests.Tests;
 
-public class NativeHttpClientTests : TestFixture
+public class NativeHttpClientTests
 {
     [Test]
     public void EnsureNoTimeout_CancellationRequested_ThrowsHttpTimeoutException()
     {
-        var canceallationTokenSource = new CancellationTokenSource();
-        canceallationTokenSource.Cancel();
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.Cancel();
 
-        Assert.Throws<HttpTimeoutException>(() => NativeHttpClient.EnsureNoTimeout(canceallationTokenSource));
+        Assert.Throws<HttpTimeoutException>(() => NativeHttpClient.EnsureNoTimeout(cancellationTokenSource));
     }
 
     [Test]
     public void EnsureNoTimeout_CancellationNotRequested_NoException()
     {
-        var canceallationTokenSource = new CancellationTokenSource();
+        var cancellationTokenSource = new CancellationTokenSource();
 
-        Assert.DoesNotThrow(() => NativeHttpClient.EnsureNoTimeout(canceallationTokenSource));
+        Assert.DoesNotThrow(() => NativeHttpClient.EnsureNoTimeout(cancellationTokenSource));
     }
 
     [Test]
     public void EnsureNetworkAvailable_NetworkNotAvailable_ThrowsNoNetworkConnectionAvailableException()
     {
-        var mockNetworkManager = CreateMock<INetworkManager>();
+        var mockNetworkManager = new Mock<INetworkManager>();
         mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(false);
 
         NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
@@ -37,7 +38,7 @@ public class NativeHttpClientTests : TestFixture
     [Test]
     public void EnsureNetworkAvailable_NetworkAvailable_NoException()
     {
-        var mockNetworkManager = CreateMock<INetworkManager>();
+        var mockNetworkManager = new Mock<INetworkManager>();
         mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(true);
 
         NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
@@ -53,7 +54,7 @@ public class NativeHttpClientTests : TestFixture
 
         var cts = NativeHttpClient.GetTimeoutCts(timeout, default);
 
-        Assert.IsNull(cts);
+        Assert.That(cts, Is.Null);
     }
 
     [Test]
@@ -64,11 +65,11 @@ public class NativeHttpClientTests : TestFixture
 
         using var cts = NativeHttpClient.GetTimeoutCts(timeout, default);
         
-        Assert.NotNull(cts);
+        Assert.That(cts, Is.Not.Null);
     }
 
     [Test]
-    public void GetTimeoutCts_CancellFirstToken_AssertSecondIsCancelled()
+    public void GetTimeoutCts_CancelFirstToken_AssertSecondIsCanceled()
     {
         using HttpRequestMessage timeout = new();
         timeout.SetTimeout(TimeSpan.FromSeconds(1));
@@ -77,6 +78,6 @@ public class NativeHttpClientTests : TestFixture
 
         using var cts2 = NativeHttpClient.GetTimeoutCts(timeout, cts1.Token);
         
-        Assert.IsTrue(cts2?.Token.IsCancellationRequested);
+        Assert.That(cts2?.Token.IsCancellationRequested, Is.True);
     }
 }
