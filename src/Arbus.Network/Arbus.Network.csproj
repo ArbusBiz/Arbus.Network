@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
 		<LangVersion>Latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
+
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Authors>ArbusBiz</Authors>
@@ -12,13 +14,17 @@
 		<RepositoryUrl>https://github.com/ArbusBiz/Arbus.Network</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/ArbusBiz/Arbus.Network</PackageProjectUrl>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="System.Text.Json" Version="7.0.2" />
 	</ItemGroup>
+
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<Compile Remove="IsExternalInit.cs" />
 	</ItemGroup>
+
 	<ItemGroup>
-	  <Using Include="System.Text.Json" />
+		<Using Include="System.Text.Json" />
 	</ItemGroup>
+
 </Project>
