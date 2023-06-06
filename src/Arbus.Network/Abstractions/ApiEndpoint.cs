@@ -55,18 +55,35 @@ public abstract class ApiEndpoint
 
 public abstract class ApiEndpoint<TResponse> : ApiEndpoint
 {
+    private static readonly TimeSpan _maxDeserializationTime = TimeSpan.FromSeconds(5);
+
     public virtual ValueTask<TResponse> GetResponse(HttpResponseMessage responseMessage)
         => FromJson<TResponse>(responseMessage.Content);
 
-    public static async ValueTask<T> FromJson<T>(HttpContent content, CancellationToken cancellationToken = default)
+    public static async ValueTask<T> FromJson<T>(HttpContent content, CancellationToken? cancellationToken = default)
     {
-        using var responseStream = await content
+        using var responseStream = await GetStream(content, cancellationToken).ConfigureAwait(false);
+
+        using var tokenSource = new CancellationTokenSource(_maxDeserializationTime);
+        cancellationToken = tokenSource.Token;
+
+        return await Deserialize<T>(responseStream, cancellationToken.Value).ConfigureAwait(false)
+            ?? throw new Exception($"Object of type {typeof(T)} is null after deserialization.");
+    }
+
+    private static Task<Stream> GetStream(HttpContent content, CancellationToken? cancellationToken)
+    {
+        return content
+#if NETSTANDARD
             .ReadAsStreamAsync()
-            .ConfigureAwait(false);
+#else
+            .ReadAsStreamAsync(cancellationToken ?? default);
+#endif
+    }
 
-        var deserializedObject = await JsonSerializer.DeserializeAsync<T>(
-            responseStream, GlobalJsonSerializerOptions.Options, cancellationToken).ConfigureAwait(false);
-
-        return deserializedObject ?? throw new Exception("Unable to deserialize stream.");
+    private static ValueTask<T?> Deserialize<T>(Stream stream, CancellationToken cancellationToken)
+    {
+        return JsonSerializer.DeserializeAsync<T>(
+            stream, GlobalJsonSerializerOptions.Options, cancellationToken);
     }
 }
