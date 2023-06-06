@@ -75,7 +75,7 @@ public abstract class ApiEndpoint<TResponse> : ApiEndpoint
     {
         return content
 #if NETSTANDARD
-            .ReadAsStreamAsync()
+            .ReadAsStreamAsync();
 #else
             .ReadAsStreamAsync(cancellationToken ?? default);
 #endif
