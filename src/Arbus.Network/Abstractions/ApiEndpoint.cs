@@ -64,7 +64,10 @@ public abstract class ApiEndpoint<TResponse> : ApiEndpoint
     {
         using var responseStream = await GetStream(content, cancellationToken).ConfigureAwait(false);
 
-        return await Deserialize<T>(responseStream, cancellationToken).ConfigureAwait(false)
+        using var tokenSource = new CancellationTokenSource(_maxDeserializationTime);
+        cancellationToken = tokenSource.Token;
+
+        return await Deserialize<T>(responseStream, cancellationToken.Value).ConfigureAwait(false)
             ?? throw new Exception($"Object of type {typeof(T)} is null after deserialization.");
     }
 
@@ -78,11 +81,9 @@ public abstract class ApiEndpoint<TResponse> : ApiEndpoint
 #endif
     }
 
-    private static ValueTask<T?> Deserialize<T>(Stream stream, CancellationToken? cancellationToken)
+    private static ValueTask<T?> Deserialize<T>(Stream stream, CancellationToken cancellationToken)
     {
-        cancellationToken ??= new CancellationTokenSource(_maxDeserializationTime)
-            .Token;
-
-        return JsonSerializer.DeserializeAsync<T>(stream, GlobalJsonSerializerOptions.Options, cancellationToken.Value);
+        return JsonSerializer.DeserializeAsync<T>(
+            stream, GlobalJsonSerializerOptions.Options, cancellationToken);
     }
 }
