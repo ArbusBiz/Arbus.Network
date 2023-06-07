@@ -17,5 +17,11 @@ public static class HttpContentType
 
     public const string ImageSvgXmlContentType = "image/svg+xml";
     
-    public const string MultipartFormData = "multipart/form-data";
+    public static class Multipart
+    {
+        public const string FormData = "multipart/form-data";
+        public const string Mixed = "multipart/mixed";
+        public const string Alternative = "multipart/alternative";
+        public const string Related  = "multipart/related ";
+    }
 }
