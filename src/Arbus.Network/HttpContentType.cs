@@ -15,8 +15,18 @@ public static class HttpContentType
         public const string Plain = "text/plain";
     }
 
-    public const string ImageSvgXmlContentType = "image/svg+xml";
-    
+    public static class Image
+    {
+        public const string SvgXml = "image/svg+xml";
+        public const string Gif = "image/gif";
+        public const string Jpeg = "image/jpeg";
+        public const string Png = "image/png";
+        public const string Tiff = "image/tiff";
+        public const string VndMicrosoftIcon = "image/vnd.microsoft.icon";
+        public const string XIcon = "image/x-icon";
+        public const string VndDjvu = "image/vnd.djvu";
+    }
+
     public static class Multipart
     {
         public const string FormData = "multipart/form-data";
