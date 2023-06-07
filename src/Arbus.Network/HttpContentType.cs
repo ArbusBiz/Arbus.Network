@@ -8,7 +8,6 @@ public static class HttpContentType
         public const string Json = "application/json";
         public const string ProblemJson = "application/problem+json";
         public const string Text = "application/text";
-        public const string MultipartFormData = "multipart/form-data";
     }
 
     public static class Text
@@ -17,4 +16,6 @@ public static class HttpContentType
     }
 
     public const string ImageSvgXmlContentType = "image/svg+xml";
+    
+    public const string MultipartFormData = "multipart/form-data";
 }
