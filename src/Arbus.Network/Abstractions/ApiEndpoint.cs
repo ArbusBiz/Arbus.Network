@@ -1,4 +1,5 @@
-﻿using Arbus.Network.Extensions;
+﻿using Arbus.Network.Exceptions;
+using Arbus.Network.Extensions;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -50,6 +51,41 @@ public abstract class ApiEndpoint
         return new(
             JsonSerializer.Serialize(
                 value, GlobalJsonSerializerOptions.Options), Encoding.UTF8, HttpContentType.Application.Json);
+    }
+
+    public virtual Task ValidateResponse(HttpResponseMessage responseMessage)
+    {
+        return EnsureSuccessResponse(responseMessage);
+    }
+
+    private async Task EnsureSuccessResponse(HttpResponseMessage responseMessage)
+    {
+        if (responseMessage.IsSuccessStatusCode is false)
+            throw await HandleNotSuccessStatusCode(responseMessage).ConfigureAwait(false);
+    }
+
+    public virtual Task<Exception> HandleNotSuccessStatusCode(HttpResponseMessage responseMessage)
+    {
+        if (responseMessage.Content.Headers.ContentType?.MediaType == HttpContentType.Application.ProblemJson)
+            return HandleProblemDetailsResponse(responseMessage);
+        return HandleAnyResponse(responseMessage);
+    }
+
+    public static async Task<Exception> HandleProblemDetailsResponse(HttpResponseMessage responseMessage)
+    {
+        var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+        var problemDetails = await JsonSerializer.DeserializeAsync<ProblemDetails>(
+            responseStream, GlobalJsonSerializerOptions.Options).ConfigureAwait(false)
+            ?? throw new Exception("Failed to deserialize ProblemDetails.");
+
+        return NetworkExceptionFactory.Create(responseMessage.StatusCode, problemDetails);
+    }
+
+    public virtual async Task<Exception> HandleAnyResponse(HttpResponseMessage responseMessage)
+    {
+        var responseString = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return NetworkExceptionFactory.Create(responseMessage.StatusCode, responseString);
     }
 }
 

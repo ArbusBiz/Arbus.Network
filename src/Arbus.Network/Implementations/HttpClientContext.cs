@@ -37,14 +37,24 @@ public class HttpClientContext : IHttpClientContext
         return await endpoint.GetResponse(response).ConfigureAwait(false);
     }
 
-    public virtual Task<HttpResponseMessage> RunEndpointInternal(ApiEndpoint endpoint)
+    public virtual async Task<HttpResponseMessage> RunEndpointInternal(ApiEndpoint endpoint)
+    {
+        var request = CreateRequest(endpoint);
+
+        var response = await _nativeHttpClient.SendRequest(
+            request, endpoint.CancellationToken ?? default).ConfigureAwait(false);
+
+        await endpoint.ValidateResponse(response).ConfigureAwait(false);
+
+        return response;
+    }
+
+    private HttpRequestMessage CreateRequest(ApiEndpoint endpoint)
     {
         var request = endpoint.CreateRequest(
             GetBaseUrl());
-
         AddHeaders(request.Headers);
-
-        return _nativeHttpClient.SendRequest(request, endpoint.CancellationToken ?? default);
+        return request;
     }
 
     public virtual Uri? GetBaseUrl() => default;
