@@ -39,8 +39,11 @@ public class NativeHttpClient : INativeHttpClient
         using var timeoutCts = GetTimeoutCts(request, cancellationToken);
         try
         {
-            var response = await _httpClient.SendAsync(request, httpCompletionOption, timeoutCts?.Token ?? cancellationToken).ConfigureAwait(false);
-            return await EnsureSuccessResponse(response).ConfigureAwait(false);
+            //await here to catch exceptions
+            return await _httpClient.SendAsync(
+                request, 
+                httpCompletionOption, 
+                timeoutCts?.Token ?? cancellationToken).ConfigureAwait(false);
         }
         catch (Exception) when (cancellationToken.IsCancellationRequested is false)
         {
@@ -77,31 +80,5 @@ public class NativeHttpClient : INativeHttpClient
     {
         if (cts != null && cts.IsCancellationRequested)
             throw new HttpTimeoutException();
-    }
-
-    public virtual Task<HttpResponseMessage> EnsureSuccessResponse(HttpResponseMessage response) => response.IsSuccessStatusCode
-        ? Task.FromResult(response)
-        : HandleNotSuccessStatusCode(response);
-
-    public virtual Task<HttpResponseMessage> HandleNotSuccessStatusCode(HttpResponseMessage response)
-    {
-        if (response.Content.Headers.ContentType?.MediaType == HttpContentType.Application.ProblemJson)
-            return HandleProblemDetailsResponse(response);
-        else
-            return HandleAnyResponse(response);
-    }
-
-    public static async Task<HttpResponseMessage> HandleProblemDetailsResponse(HttpResponseMessage response)
-    {
-        var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-        var problemDetails = await JsonSerializer.DeserializeAsync<ProblemDetails>(responseStream, GlobalJsonSerializerOptions.Options).ConfigureAwait(false)
-            ?? throw new Exception("Failed to deserialize ProblemDetails.");
-        throw NetworkExceptionFactory.Create(response.StatusCode, problemDetails);
-    }
-
-    public virtual async Task<HttpResponseMessage> HandleAnyResponse(HttpResponseMessage response)
-    {
-        var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        throw NetworkExceptionFactory.Create(response.StatusCode, responseString);
     }
 }
