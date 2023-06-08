@@ -17,14 +17,15 @@ public abstract class ApiEndpoint
 
     public CancellationToken? CancellationToken { get; set; }
 
-    protected internal virtual HttpRequestMessage CreateRequest(Uri? baseUrl)
+    protected internal virtual HttpRequestMessage CreateRequest(Uri? baseUri)
     {
-        var requestUri = CreateRequestUri(baseUrl);
+        var requestUri = CreateRequestUri(baseUri);
 
         var request = new HttpRequestMessage(Method, requestUri)
         {
             Content = CreateContent()
         };
+        AddRequestHeaders(request.Headers);
         request.SetTimeout(Timeout);
 
         return request;
