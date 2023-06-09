@@ -17,7 +17,7 @@ public abstract class ApiEndpoint
 
     public CancellationToken? CancellationToken { get; set; }
 
-    protected internal virtual HttpRequestMessage CreateRequest(Uri? baseUri)
+    public virtual HttpRequestMessage CreateRequest(Uri? baseUri)
     {
         var requestUri = CreateRequestUri(baseUri);
 
@@ -41,7 +41,7 @@ public abstract class ApiEndpoint
         return uri;
     }
 
-    protected internal virtual HttpContent? CreateContent() => default;
+    public virtual HttpContent? CreateContent() => default;
 
     protected virtual void AddRequestHeaders(HttpRequestHeaders headers)
     {
