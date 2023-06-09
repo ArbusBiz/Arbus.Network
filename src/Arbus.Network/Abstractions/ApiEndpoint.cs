@@ -17,7 +17,7 @@ public abstract class ApiEndpoint
 
     public CancellationToken? CancellationToken { get; set; }
 
-    public virtual HttpRequestMessage CreateRequest(Uri? baseUrl)
+    public virtual HttpRequestMessage CreateRequest(Uri? baseUri)
     {
         var requestUri = CreateRequestUri(baseUri);
 
