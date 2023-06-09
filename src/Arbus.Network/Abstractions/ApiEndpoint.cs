@@ -19,12 +19,13 @@ public abstract class ApiEndpoint
 
     public virtual HttpRequestMessage CreateRequest(Uri? baseUrl)
     {
-        var requestUri = CreateRequestUri(baseUrl);
+        var requestUri = CreateRequestUri(baseUri);
 
         var request = new HttpRequestMessage(Method, requestUri)
         {
             Content = CreateContent()
         };
+        AddRequestHeaders(request.Headers);
         request.SetTimeout(Timeout);
 
         return request;
