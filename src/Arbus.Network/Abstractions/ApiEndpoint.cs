@@ -9,7 +9,10 @@ public abstract class ApiEndpoint
 {
     private static readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(10);
 
-    public abstract string Path { get; }
+    /// <summary>
+    /// Relative Uri if HttpClientContext.GetBaseUri() returns not null. Absolute Uri otherwise.
+    /// </summary>
+    public abstract string Uri { get; }
 
     public abstract HttpMethod Method { get; }
 
@@ -31,13 +34,13 @@ public abstract class ApiEndpoint
         return request;
     }
 
-    private Uri CreateRequestUri(Uri? baseUrl)
+    private Uri CreateRequestUri(Uri? baseUri)
     {
         Uri uri;
-        if (baseUrl is null)
-            uri = new(Path);
+        if (baseUri is null)
+            uri = new(Uri);
         else
-            uri = new(baseUrl, Path);
+            uri = new(baseUri, Uri);
         return uri;
     }
 
