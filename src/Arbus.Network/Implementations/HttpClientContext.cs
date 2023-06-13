@@ -52,12 +52,12 @@ public class HttpClientContext : IHttpClientContext
     private HttpRequestMessage CreateRequest(ApiEndpoint endpoint)
     {
         var request = endpoint.CreateRequest(
-            GetBaseUrl());
+            GetBaseUri());
         AddHeaders(request.Headers);
         return request;
     }
 
-    public virtual Uri? GetBaseUrl() => default;
+    public virtual Uri? GetBaseUri() => default;
 
     protected virtual void AddHeaders(HttpRequestHeaders headers)
     {
