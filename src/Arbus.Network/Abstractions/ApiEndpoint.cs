@@ -12,13 +12,19 @@ public abstract class ApiEndpoint
     /// <summary>
     /// Relative Uri if HttpClientContext.GetBaseUri() returns not null. Absolute Uri otherwise.
     /// </summary>
-    public abstract string Uri { get; }
+    public string Uri { get; }
 
-    public abstract HttpMethod Method { get; }
+    public HttpMethod Method { get; }
 
     public virtual TimeSpan Timeout => _defaultTimeout;
 
     public CancellationToken? CancellationToken { get; set; }
+
+    public ApiEndpoint(HttpMethod method, string uri)
+    {
+        Method = method;
+        Uri = uri;
+    }
 
     public virtual HttpRequestMessage CreateRequest(Uri? baseUri)
     {
@@ -95,7 +101,13 @@ public abstract class ApiEndpoint
 
 public abstract class ApiEndpoint<TResponse> : ApiEndpoint
 {
-    private static readonly TimeSpan _maxDeserializationTime = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan _defaultDeserializationTimeout = TimeSpan.FromSeconds(100);
+
+    public virtual TimeSpan DeserializationTimeout => _defaultDeserializationTimeout;
+
+    public ApiEndpoint(HttpMethod method, string uri) : base(method, uri)
+    {
+    }
 
     public virtual ValueTask<TResponse> GetResponse(HttpResponseMessage responseMessage)
         => FromJson<TResponse>(responseMessage.Content);
@@ -104,7 +116,7 @@ public abstract class ApiEndpoint<TResponse> : ApiEndpoint
     {
         using var responseStream = await GetStream(content, cancellationToken).ConfigureAwait(false);
 
-        using var tokenSource = new CancellationTokenSource(_maxDeserializationTime);
+        using var tokenSource = new CancellationTokenSource(_defaultDeserializationTimeout);
         cancellationToken = tokenSource.Token;
 
         return await Deserialize<T>(responseStream, cancellationToken.Value).ConfigureAwait(false)
