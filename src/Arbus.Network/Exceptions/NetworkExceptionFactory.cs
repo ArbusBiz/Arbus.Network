@@ -1,20 +1,21 @@
-﻿using System.Net;
+﻿using Arbus.Network.Abstractions;
+using System.Net;
 
 namespace Arbus.Network.Exceptions;
 
 public static class NetworkExceptionFactory
 {
-    public static NetworkException Create(HttpStatusCode statusCode, ProblemDetails problemDetails) => statusCode switch
+    public static NetworkException Create(HttpStatusCode statusCode, ProblemDetails problemDetails, ApiEndpoint endpoint) => statusCode switch
     {
-        HttpStatusCode.Unauthorized => new UnauthorizedException(problemDetails),
-        HttpStatusCode.BadRequest => new BadRequestException(problemDetails),
-        _ => new NetworkException(statusCode, problemDetails)
+        HttpStatusCode.Unauthorized => new UnauthorizedException(problemDetails, endpoint),
+        HttpStatusCode.BadRequest => new BadRequestException(problemDetails, endpoint),
+        _ => new NetworkException(statusCode, problemDetails, endpoint)
     };
 
-    public static NetworkException Create(HttpStatusCode statusCode, string content) => statusCode switch
+    public static NetworkException Create(HttpStatusCode statusCode, string content, ApiEndpoint endpoint) => statusCode switch
     {
-        HttpStatusCode.Unauthorized => new UnauthorizedException(content),
-        HttpStatusCode.BadRequest => new BadRequestException(content),
-        _ => new NetworkException(statusCode, content)
+        HttpStatusCode.Unauthorized => new UnauthorizedException(content, endpoint),
+        HttpStatusCode.BadRequest => new BadRequestException(content, endpoint),
+        _ => new NetworkException(statusCode, content, endpoint)
     };
 }

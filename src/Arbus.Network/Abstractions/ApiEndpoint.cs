@@ -81,7 +81,7 @@ public abstract class ApiEndpoint
         return HandleAnyResponse(responseMessage);
     }
 
-    public static async Task<Exception> HandleProblemDetailsResponse(HttpResponseMessage responseMessage)
+    public async Task<Exception> HandleProblemDetailsResponse(HttpResponseMessage responseMessage)
     {
         var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
@@ -89,13 +89,13 @@ public abstract class ApiEndpoint
             responseStream, GlobalJsonSerializerOptions.Options).ConfigureAwait(false)
             ?? throw new Exception("Failed to deserialize ProblemDetails.");
 
-        return NetworkExceptionFactory.Create(responseMessage.StatusCode, problemDetails);
+        return NetworkExceptionFactory.Create(responseMessage.StatusCode, problemDetails, this);
     }
 
     public virtual async Task<Exception> HandleAnyResponse(HttpResponseMessage responseMessage)
     {
         var responseString = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return NetworkExceptionFactory.Create(responseMessage.StatusCode, responseString);
+        return NetworkExceptionFactory.Create(responseMessage.StatusCode, responseString, this);
     }
 }
 

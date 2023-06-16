@@ -73,7 +73,7 @@ public class NativeHttpClient : INativeHttpClient
     public void EnsureNetworkAvailable()
     {
         if (_networkManager.IsNetworkAvailable is false)
-            throw new NoNetoworkConnectionException();
+            throw new NoNetworkConnectionException();
     }
 
     public static void EnsureNoTimeout(CancellationTokenSource? cts)

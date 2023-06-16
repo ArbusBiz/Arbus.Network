@@ -32,7 +32,7 @@ public class NativeHttpClientTests
 
         NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
 
-        Assert.Throws<NoNetoworkConnectionException>(() => nativeHttpClient.EnsureNetworkAvailable());
+        Assert.Throws<NoNetworkConnectionException>(() => nativeHttpClient.EnsureNetworkAvailable());
     }
 
     [Test]
