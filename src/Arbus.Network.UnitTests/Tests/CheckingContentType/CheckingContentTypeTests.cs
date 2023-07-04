@@ -6,171 +6,171 @@ namespace Arbus.Network.UnitTests.Tests.CheckingContentType;
 public class CheckingContentTypeTests
 {
     [Test]
-    public void HasApplicationJsonContentType_ContentTypeIsApplicationJson_ReturnsTrue()
+    public void IsApplicationJson_ContentTypeIsApplicationJson_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Application.Json);
 
-        var result = content.HasApplicationJsonContentType();
+        var result = content.IsApplicationJson();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasApplicationTextContentType_ContentTypeIsApplicationText_ReturnsTrue()
+    public void IsApplicationText_ContentTypeIsApplicationText_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Application.Text);
 
-        bool result = content.HasApplicationTextContentType();
+        bool result = content.IsApplicationText();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasApplicationProtobufContentType_ContentTypeIsApplicationProtobuf_ReturnsTrue()
+    public void IsApplicationProtobuf_ContentTypeIsApplicationProtobuf_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Application.Protobuf);
 
-        bool result = content.HasApplicationProtobufContentType();
+        bool result = content.IsApplicationProtobuf();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasApplicationProblemJsonContentType_ContentTypeIsApplicationProblemJson_ReturnsTrue()
+    public void IsApplicationProblemJson_ContentTypeIsApplicationProblemJson_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Application.ProblemJson);
 
-        bool result = content.HasApplicationProblemJsonContentType();
+        bool result = content.IsApplicationProblemJson();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasTextPlainContentType_ContentTypeIsTextPlain_ReturnsTrue()
+    public void IsTextPlain_ContentTypeIsTextPlain_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Text.Plain);
 
-        bool result = content.HasTextPlainContentType();
+        bool result = content.IsTextPlain();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasMultipartFormDataContentType_ContentTypeIsMultipartFormData_ReturnsTrue()
+    public void IsMultipartFormData_ContentTypeIsMultipartFormData_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Multipart.FormData);
 
-        bool result = content.HasMultipartFormDataContentType();
+        bool result = content.IsMultipartFormData();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasMultipartMixedContentType_ContentTypeIsMultipartMixed_ReturnsTrue()
+    public void IsMultipartMixed_ContentTypeIsMultipartMixed_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Multipart.Mixed);
 
-        bool result = content.HasMultipartMixedContentType();
+        bool result = content.IsMultipartMixed();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasMultipartAlternativeContentType_ContentTypeIsMultipartAlternative_ReturnsTrue()
+    public void IsMultipartAlternative_ContentTypeIsMultipartAlternative_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Multipart.Alternative);
 
-        bool result = content.HasMultipartAlternativeContentType();
+        bool result = content.IsMultipartAlternative();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasMultipartRelatedContentType_ContentTypeIsMultipartRelated_ReturnsTrue()
+    public void IsMultipartRelated_ContentTypeIsMultipartRelated_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Multipart.Related);
 
-        bool result = content.HasMultipartRelatedContentType();
+        bool result = content.IsMultipartRelated();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasImageSvgXmlContentType_ContentTypeIsImageSvgXml_ReturnsTrue()
+    public void IsImageSvgXml_ContentTypeIsImageSvgXml_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.SvgXml);
 
-        bool result = content.HasImageSvgXmlContentType();
+        bool result = content.IsImageSvgXml();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasImageGifContentType_ContentTypeIsImageGif_ReturnsTrue()
+    public void IsImageGif_ContentTypeIsImageGif_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.Gif);
 
-        bool result = content.HasImageGifContentType();
+        bool result = content.IsImageGif();
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasImageJpegContentType_ContentTypeIsImageJpeg_ReturnsTrue()
+    public void IsImageJpeg_ContentTypeIsImageJpeg_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.Jpeg);
 
-        bool result = content.HasImageJpegContentType();
+        bool result = content.IsImageJpeg();
 
         result.Should().BeTrue();
     }
     
     [Test]
-    public void HasImagePngContentTypeContentTypeIsImagePngReturnsTrue()
+    public void IsImagePngIsImagePngReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.Png);
 
-        bool result = content.HasImagePngContentType();
+        bool result = content.IsImagePng();
 
         result.Should().BeTrue();
     }
     
     [Test]
-    public void HasImageTiffContentType_ContentTypeIsImageTiff_ReturnsTrue()
+    public void IsImageTiff_ContentTypeIsImageTiff_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.Tiff);
 
-        bool result = content.HasImageTiffContentType();
+        bool result = content.IsImageTiff();
 
         result.Should().BeTrue();
     }
     
     [Test]
-    public void HasImageVndMicrosoftIconContentType_ContentTypeIsImageVndMicrosoftIcon_ReturnsTrue()
+    public void IsImageVndMicrosoftIcon_ContentTypeIsImageVndMicrosoftIcon_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.VndMicrosoftIcon);
 
-        bool result = content.HasImageVndMicrosoftIconContentType();
+        bool result = content.IsImageVndMicrosoftIcon();
 
         result.Should().BeTrue();
     }
     
     [Test]
-    public void HasImageXIconContentType_ContentTypeIsImageXIcon_ReturnsTrue()
+    public void IsImageXIcon_ContentTypeIsImageXIcon_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.XIcon);
 
-        bool result = content.HasImageXIconContentType();
+        bool result = content.IsImageXIcon();
 
         result.Should().BeTrue();
     }
     
     [Test]
-    public void HasImageVndDjvuContentType_ContentTypeIsImageVndDjvu_ReturnsTrue()
+    public void IsImageVndDjvu_ContentTypeIsImageVndDjvu_ReturnsTrue()
     {
         var content = new TestableHttpContent(HttpContentType.Image.VndDjvu);
 
-        bool result = content.HasImageVndDjvuContentType();
+        bool result = content.IsImageVndDjvu();
 
         result.Should().BeTrue();
     }

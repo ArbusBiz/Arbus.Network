@@ -2,57 +2,57 @@ namespace Arbus.Network.Extensions;
 
 public static class HttpContentExtensions
 {
-    public static bool HasApplicationJsonContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Application.Json);
+    public static bool IsApplicationJson(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Application.Json);
 
-    public static bool HasApplicationTextContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Application.Text);
+    public static bool IsApplicationText(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Application.Text);
 
-    public static bool HasApplicationProtobufContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Application.Protobuf);
+    public static bool IsApplicationProtobuf(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Application.Protobuf);
 
-    public static bool HasApplicationProblemJsonContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Application.ProblemJson);
+    public static bool IsApplicationProblemJson(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Application.ProblemJson);
 
-    public static bool HasTextPlainContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Text.Plain);
+    public static bool IsTextPlain(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Text.Plain);
 
-    public static bool HasMultipartFormDataContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Multipart.FormData);
+    public static bool IsMultipartFormData(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Multipart.FormData);
 
-    public static bool HasMultipartMixedContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Multipart.Mixed);
+    public static bool IsMultipartMixed(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Multipart.Mixed);
 
-    public static bool HasMultipartAlternativeContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Multipart.Alternative);
+    public static bool IsMultipartAlternative(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Multipart.Alternative);
 
-    public static bool HasMultipartRelatedContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Multipart.Related);
+    public static bool IsMultipartRelated(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Multipart.Related);
 
-    public static bool HasImageSvgXmlContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.SvgXml);
+    public static bool IsImageSvgXml(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.SvgXml);
 
-    public static bool HasImageGifContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.Gif);
+    public static bool IsImageGif(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.Gif);
 
-    public static bool HasImageJpegContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.Jpeg);
+    public static bool IsImageJpeg(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.Jpeg);
 
-    public static bool HasImagePngContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.Png);
+    public static bool IsImagePng(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.Png);
 
-    public static bool HasImageTiffContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.Tiff);
+    public static bool IsImageTiff(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.Tiff);
 
-    public static bool HasImageVndMicrosoftIconContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.VndMicrosoftIcon);
+    public static bool IsImageVndMicrosoftIcon(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.VndMicrosoftIcon);
 
-    public static bool HasImageXIconContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.XIcon);
+    public static bool IsImageXIcon(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.XIcon);
 
-    public static bool HasImageVndDjvuContentType(this HttpContent content) =>
-        content.IsContentTypeEqualsTo(HttpContentType.Image.VndDjvu);
+    public static bool IsImageVndDjvu(this HttpContent content) =>
+        content.IsEqualsTo(HttpContentType.Image.VndDjvu);
 
-    private static bool IsContentTypeEqualsTo(this HttpContent content, string contentType) =>
+    private static bool IsEqualsTo(this HttpContent content, string contentType) =>
         content.Headers.ContentType.MediaType == contentType;
 }
