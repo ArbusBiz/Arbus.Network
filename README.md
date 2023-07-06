@@ -25,8 +25,10 @@ Let's build a better world together!
    ```c#
    public class GetAllOrdersApiEndpoint : ApiEndpoint<OrdersResponseDto>
    {
-       public override string Path => "https://example.com/api/v1/orders";
-       public override HttpMethod Method => HttpMethod.Get;
+       public GetAllOrdersApiEndpoint()
+           : base(HttpMethod.Get, "https://example.com/api/v1/orders")
+       {
+       }
    }
    ```
 
