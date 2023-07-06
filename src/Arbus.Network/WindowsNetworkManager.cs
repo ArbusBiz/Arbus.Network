@@ -1,7 +1,6 @@
-﻿using Arbus.Network.Abstractions;
-using System.Net.NetworkInformation;
+﻿using System.Net.NetworkInformation;
 
-namespace Arbus.Network.Implementations;
+namespace Arbus.Network;
 
 public class WindowsNetworkManager : INetworkManager
 {
@@ -9,7 +8,7 @@ public class WindowsNetworkManager : INetworkManager
 
     public bool IsNetworkAvailable => GetIsNetworkAvailable();
 
-    //NetworkInterface.GetIsNetworkAvailable() always returns 'true' for Xamarin.Ios and Xamarin.Android
+    //NetworkInterface.GetIsNetworkAvailable() always returns 'true' for Xamarin.iOS and Xamarin.Android
     public static bool GetIsNetworkAvailable()
     {
         foreach (NetworkInterface networkInterface in NetworkInterface.GetAllNetworkInterfaces())

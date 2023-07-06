@@ -1,9 +1,8 @@
-﻿using Arbus.Network.Abstractions;
-using Arbus.Network.Exceptions;
+﻿using Arbus.Network.Exceptions;
 using Arbus.Network.Extensions;
 using System.Net.Http.Headers;
 
-namespace Arbus.Network.Implementations;
+namespace Arbus.Network;
 
 public class NativeHttpClient : INativeHttpClient
 {
@@ -41,8 +40,8 @@ public class NativeHttpClient : INativeHttpClient
         {
             //await here to catch exceptions
             return await _httpClient.SendAsync(
-                request, 
-                httpCompletionOption, 
+                request,
+                httpCompletionOption,
                 timeoutCts?.Token ?? cancellationToken).ConfigureAwait(false);
         }
         catch (Exception) when (cancellationToken.IsCancellationRequested is false)
@@ -73,7 +72,7 @@ public class NativeHttpClient : INativeHttpClient
     public void EnsureNetworkAvailable()
     {
         if (_networkManager.IsNetworkAvailable is false)
-            throw new NoNetoworkConnectionException();
+            throw new NoNetworkConnectionException();
     }
 
     public static void EnsureNoTimeout(CancellationTokenSource? cts)

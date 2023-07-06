@@ -1,6 +1,4 @@
-﻿using Arbus.Network.Abstractions;
-
-namespace Arbus.Network.Demo;
+﻿namespace Arbus.Network.Demo;
 
 public class GetAllOrdersApiEndpoint : ApiEndpoint<OrdersResponseDto>
 {

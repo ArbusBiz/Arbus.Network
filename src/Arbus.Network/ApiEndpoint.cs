@@ -3,7 +3,7 @@ using Arbus.Network.Extensions;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace Arbus.Network.Abstractions;
+namespace Arbus.Network;
 
 public abstract class ApiEndpoint
 {
@@ -71,17 +71,20 @@ public abstract class ApiEndpoint
     private async Task EnsureSuccessResponse(HttpResponseMessage responseMessage)
     {
         if (responseMessage.IsSuccessStatusCode is false)
-            throw await HandleNotSuccessStatusCode(responseMessage).ConfigureAwait(false);
+            await HandleNotSuccessStatusCode(responseMessage).ConfigureAwait(false);
+
+        //In case of an exception above wil not be thrown make sure to throw an exception
+        responseMessage.EnsureSuccessStatusCode();
     }
 
-    public virtual Task<Exception> HandleNotSuccessStatusCode(HttpResponseMessage responseMessage)
+    public virtual Task HandleNotSuccessStatusCode(HttpResponseMessage responseMessage)
     {
         if (responseMessage.Content.Headers.ContentType?.MediaType == HttpContentType.Application.ProblemJson)
             return HandleProblemDetailsResponse(responseMessage);
         return HandleAnyResponse(responseMessage);
     }
 
-    public static async Task<Exception> HandleProblemDetailsResponse(HttpResponseMessage responseMessage)
+    public static async Task HandleProblemDetailsResponse(HttpResponseMessage responseMessage)
     {
         var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
@@ -89,13 +92,13 @@ public abstract class ApiEndpoint
             responseStream, GlobalJsonSerializerOptions.Options).ConfigureAwait(false)
             ?? throw new Exception("Failed to deserialize ProblemDetails.");
 
-        return NetworkExceptionFactory.Create(responseMessage.StatusCode, problemDetails);
+        throw new NetworkException(responseMessage.StatusCode, problemDetails);
     }
 
-    public virtual async Task<Exception> HandleAnyResponse(HttpResponseMessage responseMessage)
+    public virtual async Task HandleAnyResponse(HttpResponseMessage responseMessage)
     {
         var responseString = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return NetworkExceptionFactory.Create(responseMessage.StatusCode, responseString);
+        throw new NetworkException(responseMessage.StatusCode, responseString);
     }
 }
 
