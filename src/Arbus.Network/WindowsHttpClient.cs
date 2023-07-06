@@ -1,8 +1,7 @@
-﻿using Arbus.Network.Abstractions;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 
-namespace Arbus.Network.Implementations;
+namespace Arbus.Network;
 
 public class WindowsHttpClient : NativeHttpClient
 {

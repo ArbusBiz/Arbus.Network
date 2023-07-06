@@ -1,4 +1,4 @@
-﻿namespace Arbus.Network.Abstractions;
+﻿namespace Arbus.Network;
 
 public interface INativeHttpClient
 {

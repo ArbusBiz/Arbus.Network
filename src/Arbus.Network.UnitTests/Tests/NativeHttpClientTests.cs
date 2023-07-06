@@ -1,7 +1,5 @@
-﻿using Arbus.Network.Abstractions;
-using Arbus.Network.Exceptions;
+﻿using Arbus.Network.Exceptions;
 using Arbus.Network.Extensions;
-using Arbus.Network.Implementations;
 
 namespace Arbus.Network.UnitTests.Tests;
 
@@ -32,7 +30,7 @@ public class NativeHttpClientTests
 
         NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
 
-        Assert.Throws<NoNetoworkConnectionException>(() => nativeHttpClient.EnsureNetworkAvailable());
+        Assert.Throws<NoNetworkConnectionException>(() => nativeHttpClient.EnsureNetworkAvailable());
     }
 
     [Test]

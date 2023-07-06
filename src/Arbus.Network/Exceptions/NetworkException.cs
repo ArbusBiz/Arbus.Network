@@ -8,15 +8,15 @@ public class NetworkException : Exception
 
     public ProblemDetails? ProblemDetails { get; }
 
-    public NetworkException(HttpStatusCode httpStatusCode, string stringContent) : base(stringContent)
-    {
-        StatusCode = httpStatusCode;
-    }
-
     public NetworkException(HttpStatusCode httpStatusCode, ProblemDetails problemDetails)
         : this(httpStatusCode, problemDetails.Detail ?? problemDetails.Title ?? string.Empty)
     {
         ProblemDetails = problemDetails;
+    }
+
+    public NetworkException(HttpStatusCode httpStatusCode, string message) : this(message)
+    {
+        StatusCode = httpStatusCode;
     }
 
     public NetworkException(string message) : base(message)
