@@ -25,10 +25,10 @@ public class NativeHttpClientTests
     [Test]
     public void EnsureNetworkAvailable_NetworkNotAvailable_ThrowsNoNetworkConnectionAvailableException()
     {
-        var mockNetworkManager = new Mock<INetworkManager>();
-        mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(false);
+        var mockNetworkMonitor = new Mock<INetworkMonitor>();
+        mockNetworkMonitor.SetupGet(x => x.IsNetworkAvailable).Returns(false);
 
-        NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
+        NativeHttpClient nativeHttpClient = new(mockNetworkMonitor.Object);
 
         Assert.Throws<NoNetworkConnectionException>(() => nativeHttpClient.EnsureNetworkAvailable());
     }
@@ -36,10 +36,10 @@ public class NativeHttpClientTests
     [Test]
     public void EnsureNetworkAvailable_NetworkAvailable_NoException()
     {
-        var mockNetworkManager = new Mock<INetworkManager>();
-        mockNetworkManager.SetupGet(x => x.IsNetworkAvailable).Returns(true);
+        var mockNetworkMonitor = new Mock<INetworkMonitor>();
+        mockNetworkMonitor.SetupGet(x => x.IsNetworkAvailable).Returns(true);
 
-        NativeHttpClient nativeHttpClient = new(mockNetworkManager.Object);
+        NativeHttpClient nativeHttpClient = new(mockNetworkMonitor.Object);
 
         Assert.DoesNotThrow(() => nativeHttpClient.EnsureNetworkAvailable());
     }

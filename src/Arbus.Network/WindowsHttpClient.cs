@@ -16,12 +16,12 @@ public class WindowsHttpClient : NativeHttpClient
         }
     }
 
-    public WindowsHttpClient(INetworkManager networkManager) : base(networkManager)
+    public WindowsHttpClient(INetworkMonitor networkMonitor) : base(networkMonitor)
     {
 
     }
 
-    public WindowsHttpClient(INetworkManager networkManager, ProductInfoHeaderValue userAgent) : base(networkManager, userAgent)
+    public WindowsHttpClient(INetworkMonitor networkMonitor, ProductInfoHeaderValue userAgent) : base(networkMonitor, userAgent)
     {
     }
 }

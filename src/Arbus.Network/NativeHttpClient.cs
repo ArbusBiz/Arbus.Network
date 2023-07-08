@@ -10,16 +10,16 @@ public class NativeHttpClient : INativeHttpClient
     {
         Timeout = Timeout.InfiniteTimeSpan
     };
-    private readonly INetworkManager _networkManager;
+    private readonly INetworkMonitor _networkMonitor;
 
-    public NativeHttpClient(INetworkManager networkManager, ProductInfoHeaderValue userAgent) : this(networkManager)
+    public NativeHttpClient(INetworkMonitor networkMonitor, ProductInfoHeaderValue userAgent) : this(networkMonitor)
     {
         _httpClient.DefaultRequestHeaders.UserAgent.Add(userAgent);
     }
 
-    public NativeHttpClient(INetworkManager networkManager)
+    public NativeHttpClient(INetworkMonitor networkMonitor)
     {
-        _networkManager = networkManager;
+        _networkMonitor = networkMonitor;
     }
 
     public Task<string> GetString(string uri, TimeSpan? timeout = null) => GetString(new Uri(uri), timeout);
@@ -71,7 +71,7 @@ public class NativeHttpClient : INativeHttpClient
 
     public void EnsureNetworkAvailable()
     {
-        if (_networkManager.IsNetworkAvailable is false)
+        if (_networkMonitor.IsNetworkAvailable is false)
             throw new NoNetworkConnectionException();
     }
 
