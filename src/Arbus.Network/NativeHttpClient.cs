@@ -22,17 +22,6 @@ public class NativeHttpClient : INativeHttpClient
         _networkManager = networkManager;
     }
 
-    public Task<string> GetString(string uri, TimeSpan? timeout = null) => GetString(new Uri(uri), timeout);
-
-    public async Task<string> GetString(Uri uri, TimeSpan? timeout = null)
-    {
-        HttpRequestMessage request = new(HttpMethod.Get, uri);
-        if (timeout.HasValue)
-            request.SetTimeout(timeout.Value);
-        using var response = await SendRequest(request, CancellationToken.None).ConfigureAwait(false);
-        return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-    }
-
     public virtual async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, CancellationToken cancellationToken, HttpCompletionOption httpCompletionOption = HttpCompletionOption.ResponseHeadersRead)
     {
         using var timeoutCts = GetTimeoutCts(request, cancellationToken);
