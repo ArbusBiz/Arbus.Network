@@ -4,23 +4,16 @@ namespace Arbus.Network.Demo;
 
 public static class Program
 {
-    private static readonly INetworkManager _networkManager;
-    private static readonly INativeHttpClient _nativeHttpClient;
-    private static readonly IHttpClientContext _httpClientContext;
-
-    static Program()
-    {
-        _networkManager = new WindowsNetworkManager();
-        _nativeHttpClient = new WindowsHttpClient(_networkManager);
-        _httpClientContext = new HttpClientContext(_nativeHttpClient);
-    }
-
     public static async Task Main()
     {
+        var networkMonitor = new WindowsNetworkMonitor();
+        var nativeHttpClient = new WindowsHttpClient(networkMonitor);
+        var httpClientContext = new HttpClientContext(nativeHttpClient);
+        
         try
         {
             GetAllOrdersApiEndpoint endpoint = new();
-            var orders = await _httpClientContext.RunEndpoint(endpoint).ConfigureAwait(false);
+            await httpClientContext.RunEndpoint(endpoint).ConfigureAwait(false);
         }
         catch (NetworkException e)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Arbus.Network;
 
-public interface INetworkManager
+public interface INetworkMonitor
 {
     bool IsNetworkAvailable { get; }
     event EventHandler<bool>? NetworkAvailabilityChanged;
