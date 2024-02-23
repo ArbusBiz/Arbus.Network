@@ -80,11 +80,11 @@ public abstract class ApiEndpoint
     public virtual Task HandleNotSuccessStatusCode(HttpResponseMessage responseMessage)
     {
         if (responseMessage.Content.Headers.ContentType?.MediaType == HttpContentType.Application.ProblemJson)
-            return HandleProblemDetailsResponse(responseMessage);
+            return HandleProblemDetailsResponse(responseMessage, this);
         return HandleAnyResponse(responseMessage);
     }
 
-    public static async Task HandleProblemDetailsResponse(HttpResponseMessage responseMessage)
+    public static async Task HandleProblemDetailsResponse(HttpResponseMessage responseMessage, ApiEndpoint endpoint)
     {
         var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
@@ -92,13 +92,13 @@ public abstract class ApiEndpoint
             responseStream, GlobalJsonSerializerOptions.Options).ConfigureAwait(false)
             ?? throw new Exception("Failed to deserialize ProblemDetails.");
 
-        throw new NetworkException(responseMessage.StatusCode, problemDetails);
+        throw new NetworkException(responseMessage.StatusCode, problemDetails, endpoint);
     }
 
     public virtual async Task HandleAnyResponse(HttpResponseMessage responseMessage)
     {
         var responseString = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        throw new NetworkException(responseMessage.StatusCode, responseString);
+        throw new NetworkException(responseMessage.StatusCode, responseString, this);
     }
 }
 
