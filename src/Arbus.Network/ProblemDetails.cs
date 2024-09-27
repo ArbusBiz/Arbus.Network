@@ -1,4 +1,6 @@
-﻿namespace Arbus.Network;
+﻿using System.Text.Json.Serialization;
+
+namespace Arbus.Network;
 
 /// <summary>
 /// A machine-readable format for specifying errors in HTTP API responses based on <a href="https://tools.ietf.org/html/rfc7807">specification</a>.
@@ -30,4 +32,18 @@ public record ProblemDetails
     ///     or may not yield further information if dereferenced.
     /// </summary>
     public string? Instance { get; set; }
+    
+    /// <summary>
+    /// Gets the <see cref="IDictionary{TKey, TValue}"/> for extension members.
+    /// <para>
+    /// Problem type definitions MAY extend the problem details object with additional members. Extension members appear in the same namespace as
+    /// other members of a problem type.
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// The round-tripping behavior for <see cref="Extensions"/> is determined by the implementation of the Input \ Output formatters.
+    /// In particular, complex types or collection types may not round-trip to the original type when using the built-in JSON or XML formatters.
+    /// </remarks>
+    [JsonExtensionData]
+    public IDictionary<string, object?> Extensions { get; set; } = new Dictionary<string, object?>(StringComparer.Ordinal);
 }
