@@ -38,13 +38,13 @@ public class HttpClientContext : IHttpClientContext
     {
         var request = endpoint.CreateRequest(
             GetBaseUri());
-        AddHeaders(request.Headers);
+        AddEndpointHeaders(request.Headers, endpoint);
         return request;
     }
 
     public virtual Uri? GetBaseUri() => default;
 
-    protected virtual void AddHeaders(HttpRequestHeaders headers)
+    protected virtual void AddEndpointHeaders(HttpRequestHeaders headers, ApiEndpoint endpoint)
     {
     }
 }
