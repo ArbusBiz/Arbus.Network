@@ -15,7 +15,7 @@ Let's build a better world together!
 - Highly customizable for different needs
 
 ## How to use
-1. Provide your own implementation or use default one for interfaces: INetworkManager, INativeHttpClient, IHttpClientContext:
+1. Provide your own implementation or use default one for interfaces: INetworkMonitor, INativeHttpClient, IHttpClientContext:
    ```c#
    _networkMonitor = new WindowsNetworkMonitor();
    _nativeHttpClient = new WindowsHttpClient(_networkMonitor);
